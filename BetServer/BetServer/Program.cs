@@ -3,6 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//CORS setting
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowedOrigins",
+        policy =>
+        {
+            policy.WithOrigins("*") // note the port is included 
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddDbContext<DemoDBContext>(options =>
@@ -14,6 +26,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//CORS setting
+app.UseCors("MyAllowedOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -8,5 +8,6 @@ namespace BetServer.Models
         public int Id { get; set; }
         public float AwayTeamOdds { get; set; }
         public float HomeTeamOdds { get; set; }
+        public Sport Sports { get; set; }
     }
 }

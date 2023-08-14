@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230814100649_Initial Migration")]
+    [Migration("20230814142935_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -65,59 +65,23 @@ namespace BetServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("AwayTeamOdds")
+                        .HasColumnType("real");
+
                     b.Property<string>("HomeTeamName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OddssId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SportId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OddssId");
-
-                    b.HasIndex("SportId");
-
-                    b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("BetServer.Models.Odds", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("AwayTeamOdds")
-                        .HasColumnType("real");
-
                     b.Property<float>("HomeTeamOdds")
                         .HasColumnType("real");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Odds");
-                });
-
-            modelBuilder.Entity("BetServer.Models.Sport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Sports")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sports");
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("BetServer.Models.Team", b =>
@@ -179,26 +143,6 @@ namespace BetServer.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("BetServer.Models.Event", b =>
-                {
-                    b.HasOne("BetServer.Models.Odds", "Oddss")
-                        .WithMany()
-                        .HasForeignKey("OddssId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BetServer.Models.Sport", null)
-                        .WithMany("Events")
-                        .HasForeignKey("SportId");
-
-                    b.Navigation("Oddss");
-                });
-
-            modelBuilder.Entity("BetServer.Models.Sport", b =>
-                {
-                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("BetServer.Models.User", b =>

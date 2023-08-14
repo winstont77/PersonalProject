@@ -11,30 +11,20 @@ namespace BetServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Odds",
+                name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AwayTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AwayTeamOdds = table.Column<float>(type: "real", nullable: false),
-                    HomeTeamOdds = table.Column<float>(type: "real", nullable: false)
+                    HomeTeamOdds = table.Column<float>(type: "real", nullable: false),
+                    Sports = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Odds", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sports", x => x.Id);
+                    table.PrimaryKey("PK_Events", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,33 +52,6 @@ namespace BetServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OddssId = table.Column<int>(type: "int", nullable: false),
-                    AwayTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SportId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Events_Odds_OddssId",
-                        column: x => x.OddssId,
-                        principalTable: "Odds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Events_Sports_SportId",
-                        column: x => x.SportId,
-                        principalTable: "Sports",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -137,16 +100,6 @@ namespace BetServer.Migrations
                 name: "IX_Bets_UserId",
                 table: "Bets",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_OddssId",
-                table: "Events",
-                column: "OddssId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_SportId",
-                table: "Events",
-                column: "SportId");
         }
 
         /// <inheritdoc />
@@ -163,12 +116,6 @@ namespace BetServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Odds");
-
-            migrationBuilder.DropTable(
-                name: "Sports");
         }
     }
 }
