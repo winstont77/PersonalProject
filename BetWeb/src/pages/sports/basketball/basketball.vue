@@ -90,7 +90,7 @@ export default{
     z-index: 10;
     padding-top: 40px;
     position: relative;
-    background-image: url(../../images/backgroundImage/18-Basketball-desktop.jpg);
+    background-image: url(../../../images/backgroundImage/18-Basketball-desktop.jpg);
 }
 
 .sm-Header_Title{
