@@ -2,6 +2,7 @@
 using BetServer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetServer.Controllers
 {
@@ -52,7 +53,7 @@ namespace BetServer.Controllers
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://odds.p.rapidapi.com/v4/sports/americanfootball_nfl/odds?regions=us&oddsFormat=decimal&markets=h2h&dateFormat=iso"),
+                RequestUri = new Uri("https://odds.p.rapidapi.com/v4/sports/americanfootball/odds?regions=us&oddsFormat=decimal&markets=h2h&dateFormat=iso"),
                 Headers =
                 {
                     { "X-RapidAPI-Key", "f55cb06f51mshb6a086cd7f7c47fp136fa1jsn695f0499478f" },
@@ -77,6 +78,7 @@ namespace BetServer.Controllers
             {
                 return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
+
         }
 
         [HttpGet]
@@ -151,9 +153,56 @@ namespace BetServer.Controllers
 
         [HttpPost]
         [Route("/PostSports")]
-        public async Task<IActionResult> PostSports(DemoDBContext db, [FromBody] Team team)
+        public async Task<IActionResult> PostSports(DemoDBContext db, [FromBody] List<Sport> sports)
         {
-            return Ok(team);
+            try
+            {
+                foreach (var item in sports)
+                {
+                    db.Add<Sport>(item);
+                }
+                db.SaveChanges();
+                return Ok(db.Sports);
+            }
+            catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
+            {
+                return StatusCode(500, $"Database error: {dbEx.Message}");
+            }
+            catch (HttpRequestException ex) // 這裡捕獲了由 HttpClient 丟出的異常
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            catch (Exception ex) // 這裡捕獲了其他不明確的異常
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Route("/PostEvents")]
+        public async Task<IActionResult> PostEvents(DemoDBContext db, [FromBody] List<Event> events)
+        {
+            try
+            {
+                foreach (var item in events)
+                {
+                    db.Add<Event>(item);
+                }
+                db.SaveChanges();
+                return Ok(db.Events);
+            }
+            catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
+            {
+                return StatusCode(500, $"Database error: {dbEx.Message}");
+            }
+            catch (HttpRequestException ex) // 這裡捕獲了由 HttpClient 丟出的異常
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            catch (Exception ex) // 這裡捕獲了其他不明確的異常
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
         }
     }
 }

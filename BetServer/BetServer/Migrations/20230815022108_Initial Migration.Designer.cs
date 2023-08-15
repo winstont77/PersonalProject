@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230814142935_Initial Migration")]
+    [Migration("20230815022108_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -33,10 +33,11 @@ namespace BetServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EventsId")
-                        .HasColumnType("int");
+                    b.Property<string>("BetTeam")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TeamsId")
+                    b.Property<int>("EventsId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -45,8 +46,6 @@ namespace BetServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventsId");
-
-                    b.HasIndex("TeamsId");
 
                     b.HasIndex("UserId");
 
@@ -84,7 +83,7 @@ namespace BetServer.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("BetServer.Models.Team", b =>
+            modelBuilder.Entity("BetServer.Models.Sport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +97,7 @@ namespace BetServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Sports");
                 });
 
             modelBuilder.Entity("BetServer.Models.User", b =>
@@ -130,19 +129,11 @@ namespace BetServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BetServer.Models.Team", "Teams")
-                        .WithMany()
-                        .HasForeignKey("TeamsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BetServer.Models.User", null)
                         .WithMany("Bets")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Events");
-
-                    b.Navigation("Teams");
                 });
 
             modelBuilder.Entity("BetServer.Models.User", b =>
