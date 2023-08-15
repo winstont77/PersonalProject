@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230815022108_Initial Migration")]
+    [Migration("20230815124503_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -33,11 +33,14 @@ namespace BetServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BetTeam")
+                    b.Property<string>("DateTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EventsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Money")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -66,6 +69,10 @@ namespace BetServer.Migrations
 
                     b.Property<float>("AwayTeamOdds")
                         .HasColumnType("real");
+
+                    b.Property<string>("DateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomeTeamName")
                         .IsRequired()
@@ -107,6 +114,9 @@ namespace BetServer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

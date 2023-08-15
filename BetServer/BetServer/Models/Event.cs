@@ -11,5 +11,6 @@ namespace BetServer.Models
         public float AwayTeamOdds { get; set; }
         public float HomeTeamOdds { get; set; }
         public string Sports { get; set; }
+        public string DateTime { get; set; }
     }
 }

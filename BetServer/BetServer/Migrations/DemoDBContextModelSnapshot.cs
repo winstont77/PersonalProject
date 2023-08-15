@@ -30,11 +30,14 @@ namespace BetServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BetTeam")
+                    b.Property<string>("DateTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EventsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Money")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -63,6 +66,10 @@ namespace BetServer.Migrations
 
                     b.Property<float>("AwayTeamOdds")
                         .HasColumnType("real");
+
+                    b.Property<string>("DateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomeTeamName")
                         .IsRequired()
@@ -104,6 +111,9 @@ namespace BetServer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

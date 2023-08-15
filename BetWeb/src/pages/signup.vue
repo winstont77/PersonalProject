@@ -2,10 +2,13 @@
 import { onMounted, ref } from 'vue';
 import { reactive } from 'vue';
 import router from "../router/router.js"
+import axios from "axios"
 
 export default{
     setup(){
         let checkbox = ref(false)
+        let username = ref("")
+        let password = ref(null)
         let exclamationSignName=()=>{
             document.getElementById("oam-FieldInputNewUsername_Tooltip").style="display: block"
             setTimeout(() => {
@@ -64,11 +67,42 @@ export default{
         let gotoIndex = ()=>{
             router.push({path:"/index/basketball"})
         }
+
+        let signup = ()=>{
+            axios.post("https://localhost:7099/PostUsers",{
+                Name:username.value,
+                Password:password.value,
+                Money:0,
+            })
+            .then(res=>{
+                console.log(res)
+                if(res.status===200){
+                    router.push({path:"/index/basketball"})
+                }else{
+                    alert("failed")
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+            console.log(username.value, password.value)
+        }
         
         onMounted(()=>{
             
         })
-        return {exclamationSignName, exclamationSignPassword, focusName, focusPassword, checkTerms, displayPassword, gotoIndex}
+        return {
+            exclamationSignName, 
+            exclamationSignPassword, 
+            focusName, 
+            focusPassword, 
+            checkTerms, 
+            displayPassword, 
+            gotoIndex,
+            signup,
+            username,
+            password
+        }
     }
 }
 </script>
@@ -92,8 +126,8 @@ export default{
                                     <div class="oam-FieldGroupWithBorderTopText">
                                         <div class="oam-FieldGroupWithBorderTopText_Header">創建登陸</div>
                                         <div class="oam-FieldInputNewUsername">
-                                            <div class="oam-FieldInputNewUsername_InputRow" id="oam-FieldInputNewUsername_InputRow" v-on:click="focusName">
-                                                <input type="text" class="oam-FieldInputNewUsername_Input" placeholder="用戶名">
+                                            <div class="oam-FieldInputNewUsername_InputRow" id="oam-FieldInputNewUsername_InputRow" v-on:click="focusName" >
+                                                <input type="text" class="oam-FieldInputNewUsername_Input" placeholder="用戶名" v-model="username">
                                                 <div class="oam-FieldInputNewUsername_InfoAnchor">
                                                     <div class="oam-FieldInputNewUsername_Tooltip" id="oam-FieldInputNewUsername_Tooltip">
                                                         <div class="oam-FieldInputNewUsername_TooltipText">
@@ -109,7 +143,7 @@ export default{
                                         </div>
                                         <div class="oam-FieldInputNewPassword">
                                             <div class="oam-FieldInputNewPassword_InputRow" id="oam-FieldInputNewPassword_InputRow" v-on:click="focusPassword">
-                                                <input type="password" class="oam-FieldInputNewPassword_Input" id="oam-FieldInputNewPassword_Input" placeholder="密碼">
+                                                <input type="password" class="oam-FieldInputNewPassword_Input" id="oam-FieldInputNewPassword_Input" placeholder="密碼" v-model="password">
                                                 <span class="oam-FieldInputNewPassword_MaskToggle" v-on:click="displayPassword">顯示</span>
                                                 <div class="oam-FieldInputNewPassword_InfoAnchor">
                                                     <div class="oam-FieldInputNewPassword_Tooltip" id="oam-FieldInputNewPassword_Tooltip">
@@ -145,7 +179,7 @@ export default{
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="oam-OAFieldSubmitButton ">加入</button>
+                                        <button class="oam-OAFieldSubmitButton " v-on:click="signup">加入</button>
                                     </div>
                                 </div>
                             </div>

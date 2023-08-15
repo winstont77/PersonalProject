@@ -1,15 +1,41 @@
 <script>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { reactive } from 'vue';
+import axios from 'axios'
+import BetResult from '../../../components/BetResult.vue';
+
 
 export default{
-    setup(){
-        
-        onMounted(()=>{
-            
-        })
-        return {}
-    }
+    setup() {
+        let schedule = ref([]);
+        let displayBetResult = ref(false)
+        let selectodds = ref(null)
+        let selectteamname = ref("")
+        let selectTeam = (index, awayOrHome, odds) => {
+            console.log(index, awayOrHome, odds);
+            selectodds.value = odds
+            selectteamname.value = awayOrHome
+            displayBetResult.value = true
+
+        };
+        onMounted(() => {
+            axios.get("https://localhost:7099/GetEvents")
+                .then(res => {
+                console.log(res);
+                res.data.forEach(element => {
+                    if (element.sports === "basketball") {
+                        schedule.value.push(element);
+                    }
+                });
+                console.log(schedule.value);
+            })
+                .catch(err => {
+                console.log(err);
+            });
+        });
+        return { schedule, displayBetResult, selectodds, selectteamname, selectTeam };
+    },
+    components: { BetResult }
 }
 </script>
 <template>
@@ -41,19 +67,45 @@ export default{
                                     <div class="ff-Header ">
                                         <div class="ff-Header_Title ">精選賽事</div>
                                     </div>
-                                    <div class="ff-FeaturedFixtureScroller">
-                                        <div class="ff-FeaturedFixtureScroller_HScroll ">
-                                            <div class="ff-FeaturedFixtureScroller_ScrollContent">
-                                                <div class="ff-MarketGroupFixture "></div>
-                                                <div class="ff-MarketGroupFixture "></div>
-                                                <div class="ff-MarketGroupFixture "></div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="gl-MarketGroup"></div>
+                            <div class="gl-MarketGroup_Wrapper">
+                                <div class="gl-MarketGroupContainer">
+                                    <!-- <div class="sgl-MarketFixtureDetailsLabel">
+                                        <div class="rcl-MarketHeaderLabel">賽程</div>
+                                        <div class="rcl-MarketHeaderLabel" v-for="item in schedule">
+                                            <div>{{ item.dateTime.split('T')[0] }}</div>
+                                            <div>{{ item.awayTeamName }} </div>
+                                            <div>{{ item.homeTeamName }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="sgl-MarketFixtureDetailsLabel">
+                                        <div class="rcl-MarketHeaderLabel">賠率</div>
+                                        <div class="rcl-MarketHeaderLabel" v-for="item in schedule">
+                                            {{ item.awayTeamOdds }} : {{ item.homeTeamOdds }}
+                                        </div>
+                                    </div> -->
+                                    <table class="sgl-MarketFixtureDetailsLabel-table">
+                                        <tr style="background-color: #222;" class="sgl-MarketFixtureDetailsLabel-table-header">
+                                            <th>日期</th>
+                                            <th>時間</th>
+                                            <th>隊伍</th>
+                                            <th>賠率</th>
+                                        </tr>
+                                        <tr v-for="(item, index) in schedule" class="sgl-MarketFixtureDetailsLabel-table-content">
+                                            <td><div>{{ item.dateTime.split('T')[0] }}</div></td>
+                                            <td>{{ item.dateTime.split('T')[1].split('Z')[0] }}</td>
+                                            <td style="display: flex;">
+                                                <span v-on:click="selectTeam(index, item.awayTeamName, item.awayTeamOdds)" style="width: 40%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
+                                                <span style="width: 20%;">vs</span> 
+                                                <span v-on:click="selectTeam(index, item.homeTeamName, item.homeTeamOdds)" class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 40%;">{{ item.homeTeamName }}</span></td>
+                                            <td>{{ item.awayTeamOdds }} : {{ item.homeTeamOdds }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+                        <BetResult v-show="displayBetResult" v-bind:odds=selectodds v-bind:team=selectteamname></BetResult>
                     </div>
                 </div>
             </div>
@@ -217,5 +269,103 @@ export default{
     border-radius: 5px;
     cursor: pointer;
     min-width: 270px;
+}
+
+.gl-MarketGroup_Wrapper{
+    background-color: #383838;
+}
+
+.gl-MarketGroupContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    font-size: 0;
+}
+
+.sgl-MarketFixtureDetailsLabel{
+    width: 50%;
+}
+
+.sgl-MarketOddsExpand{
+    width: 50%;
+}
+
+.rcl-MarketHeaderLabel{
+    width: 100%;
+    background-color: #383838;
+    min-height: 30px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.rcl-MarketColumnHeader {
+    width: 100%;
+    background-color: #383838;
+    min-height: 30px;
+    text-align: center;
+    padding: 0 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.sac-ParticipantCenteredStacked50OTB{
+
+}
+
+.sgl-MarketFixtureDetailsLabel-table{
+    width: 100%;
+    background-color: #383838;
+    min-height: 30px;
+    text-align: center;
+    padding: 0 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.sgl-MarketFixtureDetailsLabel-table-header{
+    background-color: #222;
+}
+
+.sgl-MarketFixtureDetailsLabel-table > tr:nth-child(odd){
+    background-color: #444;
+}
+
+.sgl-MarketFixtureDetailsLabel-table > tr:nth-child(even){
+    background-color: #555;
+}
+
+.gl-MarketFixtureDetailsLabel-table-content-away{
+    cursor: pointer;
+}
+
+.gl-MarketFixtureDetailsLabel-table-content-home{
+    cursor: pointer;
+}
+
+.gl-MarketFixtureDetailsLabel-table-content-away:hover{
+    color: #00FFB4;
+}
+
+.gl-MarketFixtureDetailsLabel-table-content-home:hover{
+    color: #00FFB4;
+}
+
+tr{
+    cursor: default;
 }
 </style>

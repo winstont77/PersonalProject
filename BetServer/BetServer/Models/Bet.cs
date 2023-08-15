@@ -7,6 +7,7 @@ namespace BetServer.Models
     {
         public int Id { get; set; }
         public Event Events { get; set; }
-        public string BetTeam { get; set; }
+        public string DateTime { get; set; } 
+        public int Money { get; set; }
     }
 }

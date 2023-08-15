@@ -20,7 +20,8 @@ namespace BetServer.Migrations
                     HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AwayTeamOdds = table.Column<float>(type: "real", nullable: false),
                     HomeTeamOdds = table.Column<float>(type: "real", nullable: false),
-                    Sports = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Sports = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +48,8 @@ namespace BetServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Money = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,7 +63,8 @@ namespace BetServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventsId = table.Column<int>(type: "int", nullable: false),
-                    BetTeam = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Money = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
