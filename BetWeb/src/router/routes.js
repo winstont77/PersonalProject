@@ -13,6 +13,10 @@ const routes = [
         path:"/signup",
         component:()=>import("../pages/signup.vue")
     },
+    {
+        path:"/signin",
+        component:()=>import("../pages/signin.vue")
+    },
 ]
 
 export default routes;

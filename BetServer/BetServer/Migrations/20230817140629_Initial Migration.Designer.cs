@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230815124503_Initial Migration")]
+    [Migration("20230817140629_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace BetServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EventsId")
+                    b.Property<int?>("EventsId")
                         .HasColumnType("int");
 
                     b.Property<int>("Money")
@@ -135,9 +135,7 @@ namespace BetServer.Migrations
                 {
                     b.HasOne("BetServer.Models.Event", "Events")
                         .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventsId");
 
                     b.HasOne("BetServer.Models.User", null)
                         .WithMany("Bets")

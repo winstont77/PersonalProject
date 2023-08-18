@@ -11,13 +11,18 @@ export default{
         let displayBetResult = ref(false)
         let selectodds = ref(null)
         let selectteamname = ref("")
+        let selectevent = ref({})
         let selectTeam = (index, awayOrHome, odds) => {
             console.log(index, awayOrHome, odds);
             selectodds.value = odds
             selectteamname.value = awayOrHome
             displayBetResult.value = true
-
+            selectevent.value = schedule.value[index]
         };
+
+        let handleBetResultEmit = (value) => {
+            displayBetResult.value = value; 
+        }
         onMounted(() => {
             axios.get("https://localhost:7099/GetEvents")
                 .then(res => {
@@ -33,7 +38,7 @@ export default{
                 console.log(err);
             });
         });
-        return { schedule, displayBetResult, selectodds, selectteamname, selectTeam };
+        return { schedule, displayBetResult, selectodds, selectteamname, selectevent, selectTeam, handleBetResultEmit };
     },
     components: { BetResult }
 }
@@ -105,7 +110,7 @@ export default{
                                 </div>
                             </div>
                         </div>
-                        <BetResult v-show="displayBetResult" v-bind:odds=selectodds v-bind:team=selectteamname></BetResult>
+                        <BetResult v-show="displayBetResult" v-bind:odds=selectodds v-bind:team=selectteamname v-bind:event="selectevent" @betResultEmit="handleBetResultEmit"></BetResult>
                     </div>
                 </div>
             </div>
@@ -345,8 +350,16 @@ export default{
     background-color: #444;
 }
 
+.sgl-MarketFixtureDetailsLabel-table > tr:nth-child(odd):hover{
+    background-color: #222;
+}
+
 .sgl-MarketFixtureDetailsLabel-table > tr:nth-child(even){
     background-color: #555;
+}
+
+.sgl-MarketFixtureDetailsLabel-table > tr:nth-child(even):hover{
+    background-color: #222;
 }
 
 .gl-MarketFixtureDetailsLabel-table-content-away{

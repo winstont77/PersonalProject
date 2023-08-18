@@ -9,11 +9,15 @@ export default{
         let signupButton=()=>{
             router.push({path:"/signup"})
         }
+
+        let signinButton=()=>{
+            router.push({path:"/signin"})
+        }
         
         onMounted(()=>{
             
         })
-        return {signupButton}
+        return {signupButton, signinButton}
     }
 }
 </script>
@@ -48,7 +52,7 @@ export default{
                         <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer" v-on:click="signupButton">
                             <div>註冊</div>
                         </div>
-                        <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer">
+                        <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer" v-on:click="signinButton">
                             <div>登錄</div>
                         </div>
                     </div>

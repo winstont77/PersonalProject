@@ -34,7 +34,7 @@ namespace BetServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EventsId")
+                    b.Property<int?>("EventsId")
                         .HasColumnType("int");
 
                     b.Property<int>("Money")
@@ -132,9 +132,7 @@ namespace BetServer.Migrations
                 {
                     b.HasOne("BetServer.Models.Event", "Events")
                         .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventsId");
 
                     b.HasOne("BetServer.Models.User", null)
                         .WithMany("Bets")

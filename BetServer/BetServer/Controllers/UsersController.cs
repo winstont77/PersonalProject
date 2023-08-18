@@ -16,8 +16,8 @@ namespace BetServer.Controllers
         {
             try
             {
-                //db.Add<User>(user);
-                //db.SaveChanges();
+                db.Add<User>(user);
+                db.SaveChanges();
                 return Ok(user);
             }
             catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
@@ -32,6 +32,18 @@ namespace BetServer.Controllers
             {
                 return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
+        }
+
+        public class SignIn
+        {
+            public string Name { get; set; }
+            public string Password { get; set; }
+        }
+        [HttpPost]
+        [Route("/PostSignIn")]
+        public async Task<IActionResult> PostSignIn([FromBody] SignIn signIn)
+        {
+            return Ok(signIn);
         }
     }
 }

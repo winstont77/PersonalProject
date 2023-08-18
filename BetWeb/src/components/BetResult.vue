@@ -1,12 +1,73 @@
 <script setup>
+import axios from 'axios';
 import { ref } from 'vue'
 
-defineProps({
+let prop = defineProps({
   odds:null,
-  team:null
+  team:null,
+  event:{}
 })
 
-const count = ref(0)
+let emit = defineEmits(['betResultEmit'])
+
+let betResultButton = (display, sureOrCancel)=>{
+    if(sureOrCancel===true){
+        axios.post("https://localhost:7099/PostBets",{
+            "Bet": {
+                    "events": {
+                    "id": prop.event.id,
+                    "awayTeamName": prop.event.awayTeamName,
+                    "homeTeamName": prop.event.homeTeamName,
+                    "awayTeamOdds": prop.event.awayTeamOdds,
+                    "homeTeamOdds": prop.event.homeTeamOdds,
+                    "sports": prop.event.sports,
+                    "dateTime": prop.event.dateTime
+                },
+                "dateTime": getCurrentDateInFormat().toString(),
+                "money": 0
+            },
+            "UserId":1
+        })
+        .then(res=>{
+            console.log(res)
+        }).catch(err=>[
+            console.log(err)
+        ])
+    }else{
+        console.log("cancel bet")
+    }
+    // console.log({Money:betMoney.value, 
+    //         DateTIme:getCurrentDateInFormat(), 
+    //         Event:{
+    //             Id:prop.event.id,
+    //             Sports:prop.event.sports,
+    //             DateTIme:prop.event.dateTime,
+    //             AwayTeamName:prop.event.awayTeamName,
+    //             AwayTeamOdds:prop.event.awayTeamOdds,
+    //             HomeTeamName:prop.event.homeTeamName,
+    //             HomeTeamOdds:prop.event.homeTeamOdds
+    //         }})
+    emit("betResultEmit", display)
+}
+
+let getCurrentDateInFormat = () => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');  // Month is 0-indexed, so we add 1
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hour}:${seconds}:00Z`;
+}
+
+let updateBetMoney = (event) => {
+    betMoney.value = event.target.value;
+}
+
+let betMoney = ref(1);
+
 </script>
 
 <template>
@@ -20,16 +81,19 @@ const count = ref(0)
                     <th style="width:60%">投注隊伍</th>
                 </tr>
                 <tr>
-                    <td>100</td>
+                    <td>{{betMoney}}</td>
                     <td>{{ odds }}</td>
                     <td>{{ team }}</td>
                 </tr>
             </table>
         </div>
+        <div style="display: flex;">
+            <input type="range" class="betmoneyinputrange" min="100" max="500" value="50" v-on:input="updateBetMoney">
+        </div>
         <div class="betResult-content-surebutton">
             <div class="betResult-content-surebutton-content">
-                <div class="betResult-content-surebutton-text">確認</div>
-                <div class="betResult-content-surebutton-textcancel">取消</div>
+                <div class="betResult-content-surebutton-text" v-on:click="betResultButton(false, true)">確認</div>
+                <div class="betResult-content-surebutton-textcancel" v-on:click="betResultButton(false, false)">取消</div>
             </div>
         </div>
     </div>
@@ -66,7 +130,7 @@ const count = ref(0)
     width: 25%;
     text-align: center;
     color: #DDDDDD;
-    background-color: #333;
+    background-color: #222;
     padding: 5px 0;
 }
 
@@ -89,7 +153,7 @@ const count = ref(0)
 }
 
 .betResult-content-surebutton-text{
-    background-color: #367a65;
+    background-color: #126e51;
     padding: 5px 10px;
     border-radius: 3px;
     cursor: pointer;
@@ -99,5 +163,32 @@ const count = ref(0)
     padding: 5px 10px;
     cursor: pointer;
     margin-left: 20px;
+}
+
+
+
+.betmoneyinputrange {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 88%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.betmoneyinputrange::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.betmoneyinputrange::-webkit-slider-runnable-track {
+    /* background-color: #126e51; */
+  background: #367a65;
+  height: 0.5rem;
+  border-radius: 5px;
 }
 </style>

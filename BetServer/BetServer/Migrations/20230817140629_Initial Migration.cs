@@ -62,7 +62,7 @@ namespace BetServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventsId = table.Column<int>(type: "int", nullable: false),
+                    EventsId = table.Column<int>(type: "int", nullable: true),
                     DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Money = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
@@ -74,8 +74,7 @@ namespace BetServer.Migrations
                         name: "FK_Bets_Events_EventsId",
                         column: x => x.EventsId,
                         principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bets_Users_UserId",
                         column: x => x.UserId,

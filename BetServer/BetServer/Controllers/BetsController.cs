@@ -1,20 +1,38 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BetServer.Data;
+using BetServer.Models;
+using BetServer.Models.Function;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BetServer.Controllers
 {
+    public class BetRequest
+    {
+        public Bet Bet { get; set; }
+        public int UserId { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class BetsController : ControllerBase
     {
         [HttpPost]
         [Route("/PostBets")]
-        public async Task<IActionResult> PostBets()
+        public async Task<IActionResult> PostBets(DemoDBContext db, [FromBody] BetRequest betRequest)
         {
             try
             {
-                return Ok();
+
+                var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Id == betRequest.UserId);
+
+                user.Bets.Add(betRequest.Bet);
+                db.SaveChanges();
+                return Ok(betRequest);
+
+
+
             }
             catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
             {
