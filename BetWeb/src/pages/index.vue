@@ -13,11 +13,19 @@ export default{
         let signinButton=()=>{
             router.push({path:"/signin"})
         }
+
+        let myBet = ()=>{
+            router.push({path:"/index/myBet"})
+        }
+
+        let sportBet = ()=>{
+            router.push({path:"/index/sport"})
+        }
         
         onMounted(()=>{
             
         })
-        return {signupButton, signinButton}
+        return {signupButton, signinButton, myBet, sportBet}
     }
 }
 </script>
@@ -46,7 +54,15 @@ export default{
                 </div>
                 <div class="hm-MainHeaderWide">
                     <div class="hm-MainHeaderLogoWide">
-                        <div class="hm-MainHeaderLogoWide_Bet365LogoImage"></div>
+                        <div class="hm-MainHeaderLogoWide_Bet365LogoImage" v-on:click="sportBet"></div>
+                    </div>
+                    <div class="hm-MainHeaderCentreWide">
+                        <div class="hm-MainHeaderCentreWide_Link" v-on:click="sportBet">
+                            <div>體育投注</div>
+                        </div>
+                        <div class="hm-MainHeaderCentreWide_Link" v-on:click="myBet">
+                            <div>我的投注</div>
+                        </div>
                     </div>
                     <div class="hm-MainHeaderRHSLoggedOutWide">
                         <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer" v-on:click="signupButton">
@@ -58,7 +74,8 @@ export default{
                     </div>
                 </div>
             </div>
-            <div class="wc-PageView">
+            <RouterView></RouterView>
+            <!-- <div class="wc-PageView">
                 <div class="wc-PageView_Main">
                     <div class="wcl-CommonElementStyle_NavContentContainer">
                         <div class="wcl-CommonElementStyle_WebNav">
@@ -156,12 +173,11 @@ export default{
                             </div>
                         </div>
                         <div class="wcl-PageContainer">
-                            <!-- <div class="wcl-PageContainer_Colcontainer"></div> -->
                             <RouterView></RouterView>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -343,6 +359,39 @@ export default{
     background-size: contain;
     background-image: url(../images//logos/indexLogo.svg);
     cursor: pointer;
+}
+
+.hm-MainHeaderCentreWide{
+    font-size: 14px;
+    height: 100%;
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hm-MainHeaderCentreWide_Link{
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #e4e4e4;
+    text-decoration: none;
+    margin: 0 22.5px;
+    height: 100%;
+    line-height: 100%;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.hm-MainHeaderCentreWide_Link:hover{
+    color: #26ffbe;
 }
 
 .hm-MainHeaderRHSLoggedOutWide {

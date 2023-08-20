@@ -24,6 +24,7 @@ export default{
             displayBetResult.value = value; 
         }
         onMounted(() => {
+            console.log(localStorage.getItem("token"))
             axios.get("https://localhost:7099/GetEvents")
                 .then(res => {
                 console.log(res);

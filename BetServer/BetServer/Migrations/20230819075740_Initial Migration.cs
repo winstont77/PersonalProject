@@ -47,9 +47,10 @@ namespace BetServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Money = table.Column<int>(type: "int", nullable: false)
+                    Money = table.Column<int>(type: "int", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,6 +92,12 @@ namespace BetServer.Migrations
                 name: "IX_Bets_UserId",
                 table: "Bets",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Name",
+                table: "Users",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />

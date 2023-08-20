@@ -13,5 +13,13 @@ namespace BetServer.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Sport> Sports { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); // Call the base method
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
+        }
     }
 }

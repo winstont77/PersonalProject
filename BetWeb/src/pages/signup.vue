@@ -9,6 +9,7 @@ export default{
         let checkbox = ref(false)
         let username = ref("")
         let password = ref(null)
+        let displayerror = ref(false);
         let exclamationSignName=()=>{
             document.getElementById("oam-FieldInputNewUsername_Tooltip").style="display: block"
             setTimeout(() => {
@@ -65,7 +66,7 @@ export default{
         }
 
         let gotoIndex = ()=>{
-            router.push({path:"/index/basketball"})
+            router.push({path:"/index/sport/basketball"})
         }
 
         let signup = ()=>{
@@ -77,13 +78,14 @@ export default{
             .then(res=>{
                 console.log(res)
                 if(res.status===200){
-                    router.push({path:"/index/basketball"})
+                    router.push({path:"/index/sport/basketball"})
                 }else{
                     alert("failed")
                 }
             })
             .catch(err=>{
                 console.log(err)
+                displayerror.value = true
             })
             console.log(username.value, password.value)
         }
@@ -100,6 +102,7 @@ export default{
             displayPassword, 
             gotoIndex,
             signup,
+            displayerror,
             username,
             password
         }
@@ -179,6 +182,7 @@ export default{
                                         </div>
                                     </div>
                                     <div>
+                                        <div class="signuperrorprompt" v-show="displayerror">使用者名稱重複</div>
                                         <button class="oam-OAFieldSubmitButton " v-on:click="signup">加入</button>
                                     </div>
                                 </div>
@@ -527,6 +531,11 @@ export default{
     background-size: var(--custom-background-size);
     background-position: var(--custom-background-position);
     background-repeat: var(--custom-background-repeat);
+}
+
+.signuperrorprompt{
+    margin-top: 30px;
+    color: crimson;
 }
 
 .oam-OAFieldSubmitButton {

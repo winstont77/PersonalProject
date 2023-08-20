@@ -3,10 +3,24 @@ const routes = [
         path:"/index",
         component:()=>import("../pages/index.vue"),
         children:[
+            // {
+            //     path: 'basketball',
+            //     component: ()=>import("../pages/sports/basketball/basketball.vue")
+            // },
             {
-                path: 'basketball',
-                component: ()=>import("../pages/sports/basketball/basketball.vue")
+                path: 'sport',
+                component: ()=>import("../pages/PageView/SportBet.vue"),
+                children:[
+                    {
+                        path: 'basketball',
+                        component: ()=>import("../pages/sports/basketball/basketball.vue")
+                    }
+                ]
             },
+            {
+                path: 'myBet',
+                component: ()=>import("../pages/PageView/MyBet.vue")
+            }
         ]
     },
     {

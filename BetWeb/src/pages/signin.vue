@@ -9,6 +9,7 @@ export default{
         let checkbox = ref(false)
         let username = ref("")
         let password = ref(null)
+        let displayerror = ref(false);
         // let exclamationSignName=()=>{
         //     document.getElementById("oam-FieldInputNewUsername_Tooltip").style="display: block"
         //     setTimeout(() => {
@@ -65,20 +66,23 @@ export default{
         }
 
         let gotoIndex = ()=>{
-            router.push({path:"/index/basketball"})
+            router.push({path:"/index/sport/basketball"})
         }
 
         let signin = ()=>{
-            axios.post("https://localhost:7099/PostUsers",{
+            axios.post("https://localhost:7099/PostSignIn",{
                 Name:username.value,
                 Password:password.value,
             })
             .then(res=>{
                 console.log(res)
-                if(res.status===200){
-                    router.push({path:"/index/basketball"})
+                if(res.status===200&&res.data!=="user not found"){
+                    localStorage.setItem("token", res.data);
+                    router.push({path:"/index/sport/basketball"})
+                    displayerror.value = false;
                 }else{
-                    alert("failed")
+                    // alert("failed")
+                    displayerror.value = true
                 }
             })
             .catch(err=>{
@@ -99,6 +103,7 @@ export default{
             displayPassword, 
             gotoIndex,
             signin,
+            displayerror,
             username,
             password
         }
@@ -178,7 +183,8 @@ export default{
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="oam-OAFieldSubmitButton " v-on:click="signin" style="margin-top: 30px;">加入</button>
+                                        <div class="signinerrorprompt" v-show="displayerror">使用者名稱或密碼輸入錯誤</div>
+                                        <button class="oam-OAFieldSubmitButton " v-on:click="signin">加入</button>
                                     </div>
                                 </div>
                             </div>
@@ -526,6 +532,11 @@ export default{
     background-size: var(--custom-background-size);
     background-position: var(--custom-background-position);
     background-repeat: var(--custom-background-repeat);
+}
+
+.signinerrorprompt{
+    margin-top: 30px;
+    color: crimson;
 }
 
 .oam-OAFieldSubmitButton {

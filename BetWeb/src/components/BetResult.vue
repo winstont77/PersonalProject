@@ -27,7 +27,10 @@ let betResultButton = (display, sureOrCancel)=>{
                 "money": 0
             },
             "UserId":1
-        })
+        },{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }})
         .then(res=>{
             console.log(res)
         }).catch(err=>[
@@ -36,6 +39,9 @@ let betResultButton = (display, sureOrCancel)=>{
     }else{
         console.log("cancel bet")
     }
+
+
+    
     // console.log({Money:betMoney.value, 
     //         DateTIme:getCurrentDateInFormat(), 
     //         Event:{
