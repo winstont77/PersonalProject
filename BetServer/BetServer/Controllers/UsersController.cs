@@ -92,7 +92,7 @@ namespace BetServer.Controllers
                 Issuer = _config["Jwt:Issuer"],
                 Audience = _config["Jwt:Audience"],
                 Subject = userClaims,
-                Expires = DateTime.Now.AddMinutes(30),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
             };
             // 產出所需要的 JWT Token 物件
@@ -111,7 +111,7 @@ namespace BetServer.Controllers
         //    var claims = new[]
         //    {
         //        new Claim(ClaimTypes.NameIdentifier,user.Name),
-    
+
         //    };
         //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
         //        _config["Jwt:Audience"],
@@ -135,5 +135,24 @@ namespace BetServer.Controllers
         //    }
         //    return null;
         //}
+
+
+        public class MemberName
+        {
+            public string Name { get; set; }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("/PostMemberDetail")]
+        public async Task<IActionResult> PostMemberDetail(DemoDBContext db, [FromBody] MemberName memberName) 
+        {
+            var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Name == memberName.Name);
+            return Ok(new
+            {
+                Name = user.Name,
+                Money = user.Money,
+                Bet = user.Bets
+            });
+        }
     }
 }

@@ -7,17 +7,7 @@ import router from "../../router/router.js"
 export default{
     setup() {
         onMounted(()=>{
-            axios.get("https://localhost:7099/GetUserDetail",{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }})
-            .then(res=>{
-                console.log(res)
-            })
-            .catch(err=>{
-                console.log(err)
-                router.push({path:"/signin"})
-            })
+            
         })
     },
     components: {  }

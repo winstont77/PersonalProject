@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue'
+import router from "../router/router.js"
 
 let prop = defineProps({
   odds:null,
@@ -33,9 +34,11 @@ let betResultButton = (display, sureOrCancel)=>{
         }})
         .then(res=>{
             console.log(res)
-        }).catch(err=>[
+        }).catch(err=>{
             console.log(err)
-        ])
+            localStorage.removeItem("token")
+            router.push({path:"/signin"})
+        })
     }else{
         console.log("cancel bet")
     }

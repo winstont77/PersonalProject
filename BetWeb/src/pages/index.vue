@@ -1,11 +1,13 @@
 <script>
 import { onMounted } from 'vue';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import router from "../router/router.js"
+import axios from 'axios';
 
 export default{
     setup(){
-
+        let mainHeaderRHSLoggedOutWideContainer = ref(true);
+        let membersMenuModuleContainer_DarkWash = ref(false);
         let signupButton=()=>{
             router.push({path:"/signup"})
         }
@@ -15,17 +17,39 @@ export default{
         }
 
         let myBet = ()=>{
+            membersMenuModuleContainer_DarkWash.value = false
             router.push({path:"/index/myBet"})
         }
 
         let sportBet = ()=>{
             router.push({path:"/index/sport"})
         }
+
+        let clickMember = ()=>{
+            console.log(membersMenuModuleContainer_DarkWash.value)
+            membersMenuModuleContainer_DarkWash.value =! membersMenuModuleContainer_DarkWash.value
+        }
         
         onMounted(()=>{
-            
+            if(localStorage.getItem("token")!==null){
+                mainHeaderRHSLoggedOutWideContainer.value = false
+                axios.post("https://localhost:7099/PostMemberDetail",{
+                    Name:"w"
+                },{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                })
+                .then(res=>{
+                    console.log(res)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            }
+            console.log(localStorage.getItem("token"))
         })
-        return {signupButton, signinButton, myBet, sportBet}
+        return {signupButton, signinButton, myBet, sportBet, clickMember, mainHeaderRHSLoggedOutWideContainer, membersMenuModuleContainer_DarkWash}
     }
 }
 </script>
@@ -33,6 +57,42 @@ export default{
     <div class="wc-WebConsoleModule_SiteContainer">
         <div class="wc-WebConsoleModule_Header">
             <div class="hm-HeaderModule">
+                <div v-show="membersMenuModuleContainer_DarkWash">
+                    <div class="um-MemberMenuModule_WidthState-2">
+                        <div class="um-MemberMenuModule_Menu">
+                            <div class="um-Header ">
+                                <div class="um-Header_InfoRow ">
+                                    <div class="um-Header_LeftSideWrapper ">
+                                        <div class="um-UserInfo ">
+                                            <div class="um-UserInfo_AccountInfo ">
+                                                <span class="um-UserInfo_UserName ">winstont77</span>
+                                                <span class="um-UserInfo_AccountBalanceWrapper ">
+                                                    <span class="um-UserInfo_Balance ">NT$0.00</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="um-Header_RightSideWrapper ">
+                                        <div class="um-DepositButton ">
+                                            存款
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="um-MemberMenuModule_AreaPlaceholder ">
+                                <div class="um-MainMenu ">
+                                    <div class="um-GeneralTab ">
+                                        <div class="um-GeneralTab_LogoutOption ">
+                                            <div class="ul-MembersLinkButton-wide">
+                                                <div class="ul-MembersLinkButton_Text ">登出</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="hm-ProductHeaderWide">
                     <div class="hm-ProductHeaderWide_Container">
                         <div class="hm-HeaderScroller ">
@@ -65,14 +125,18 @@ export default{
                         </div>
                     </div>
                     <div class="hm-MainHeaderRHSLoggedOutWide">
-                        <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer" v-on:click="signupButton">
+                        <div v-show="mainHeaderRHSLoggedOutWideContainer" class="hm-MainHeaderRHSLoggedOutWide_JoinContainer" v-on:click="signupButton">
                             <div>註冊</div>
                         </div>
-                        <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer" v-on:click="signinButton">
+                        <div v-show="mainHeaderRHSLoggedOutWideContainer" class="hm-MainHeaderRHSLoggedOutWide_LoginContainer" v-on:click="signinButton">
                             <div>登錄</div>
+                        </div>
+                        <div v-show="!mainHeaderRHSLoggedOutWideContainer" class="hm-MainHeaderMembersWide" v-on:click="clickMember">
+                            <div class="hm-MainHeaderMembersWide_MembersMenuIcon"></div>
                         </div>
                     </div>
                 </div>
+                <div v-show="membersMenuModuleContainer_DarkWash" class="hm-MembersMenuModuleContainer_DarkWash"></div>
             </div>
             <RouterView></RouterView>
             <!-- <div class="wc-PageView">
@@ -200,6 +264,170 @@ export default{
     position: relative;
     display: flex;
     flex-direction: column;
+}
+
+.um-MemberMenuModule_WidthState-2{
+    padding-bottom: 25px;
+    text-align: right;
+    display: block;
+    position: absolute;
+    width: 100%;
+    max-width: 375px;
+    z-index: 40;
+    right: 0;
+    top: 100%;
+}
+
+.um-MemberMenuModule_Menu{
+    max-height: calc(100vh - 115px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    display: inline-block;
+    width: 100%;
+    max-width: 375px;
+    text-align: left;
+    background-color: #f8f9fa;
+    transition: transform .15s;
+    transform: translateZ(0);
+    border-radius: 0 0 0 2px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.5);
+}
+
+.um-Header {
+
+}
+
+.um-Header_InfoRow {
+    display: inline-flex;
+    width: 100%;
+    font-size: 15px;
+    line-height: 17px;
+    padding: 20px 15px 0;
+    white-space: nowrap;
+}
+
+.um-Header_LeftSideWrapper {
+    display: flex;
+    padding-right: 20px;
+}
+
+.um-UserInfo {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.um-UserInfo_AccountInfo{
+    cursor: default;
+}
+
+.um-UserInfo_UserName {
+    width: 100%;
+    display: block;
+    font-size: 12px;
+    color: #404040;
+    line-height: 17px;
+}
+
+.um-UserInfo_AccountBalanceWrapper {
+    width: 100%;
+    display: inline-flex;
+    line-height: 23px;
+}
+
+.um-UserInfo_Balance {
+    font-size: 20px;
+    font-weight: 700;
+    color: #404040;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.um-Header_RightSideWrapper {
+    display: flex;
+    vertical-align: middle;
+    text-align: right;
+    margin-left: auto;
+    margin-bottom: 15px;
+    min-width: 120px;
+}
+
+.um-DepositButton {
+    display: flex;
+    vertical-align: middle;
+    padding: 0 12px;
+    border: 1px solid #c3c3c3;
+    color: #404040;
+    border-radius: 2px;
+    height: 44px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+    min-width: 120px;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafbfc;
+}
+
+.um-DepositButton::before{
+    content: "";
+    width: 12px;
+    height: 13px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-image: url(../images/topUp.svg);
+}
+
+.um-MemberMenuModule_AreaPlaceholder {
+
+}
+
+.um-MainMenu {
+
+}
+
+.um-GeneralTab {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.um-GeneralTab_LogoutOption {
+    width: 100%;
+}
+
+.ul-MembersLinkButton-wide{
+    height: 55px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    text-align: left;
+    font-size: 15px;
+    align-items: flex-start;
+    width: 100%;
+    margin-right: 0;
+    font-weight: 400;
+    color: #404040;
+    line-height: 45px;
+    padding-left: 15px;
+    padding-right: 15px;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+.ul-MembersLinkButton-wide:hover{
+    background-color: #fff;
+}
+
+.ul-MembersLinkButton_Text {
+    text-align: left;
+    width: 100%;
+    word-break: break-word;
+    word-wrap: break-word;
 }
 
 .hm-ProductHeaderWide{
@@ -439,6 +667,28 @@ export default{
     color: #26ffbe;
 }
 
+.hm-MainHeaderMembersWide{
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 160px;
+    padding-right: 20px;
+}
+
+.hm-MainHeaderMembersWide_MembersMenuIcon{
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    position: relative;
+    background-image: url(../images/member.svg);
+}
+
 .wc-PageView{
     display: flex;
     align-items: stretch;
@@ -629,5 +879,17 @@ export default{
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: none;
+}
+
+.hm-MembersMenuModuleContainer_DarkWash {
+    background-color: #000;
+    opacity: .6;
+    position: fixed;
+    top: 105px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    height: calc(100vh - 105px);
 }
 </style>

@@ -70,24 +70,26 @@ export default{
         }
 
         let signin = ()=>{
-            axios.post("https://localhost:7099/PostSignIn",{
-                Name:username.value,
-                Password:password.value,
-            })
-            .then(res=>{
-                console.log(res)
-                if(res.status===200&&res.data!=="user not found"){
-                    localStorage.setItem("token", res.data);
-                    router.push({path:"/index/sport/basketball"})
-                    displayerror.value = false;
-                }else{
-                    // alert("failed")
-                    displayerror.value = true
-                }
-            })
-            .catch(err=>{
-                console.log(err)
-            })
+            if(username.value!==""&&password!==""){
+                axios.post("https://localhost:7099/PostSignIn",{
+                    Name:username.value,
+                    Password:password.value,
+                })
+                .then(res=>{
+                    console.log(res)
+                    if(res.status===200&&res.data!=="user not found"){
+                        localStorage.setItem("token", res.data);
+                        router.push({path:"/index/sport/basketball"})
+                        displayerror.value = false;
+                    }else{
+                        // alert("failed")
+                        displayerror.value = true
+                    }
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            }
             console.log(username.value, password.value)
         }
         

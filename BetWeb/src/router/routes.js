@@ -20,6 +20,10 @@ const routes = [
             {
                 path: 'myBet',
                 component: ()=>import("../pages/PageView/MyBet.vue")
+            },
+            {
+                path:'/backendManage',
+                component:()=>import("../pages/PageView/BackendManage.vue")
             }
         ]
     },
