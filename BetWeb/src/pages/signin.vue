@@ -78,7 +78,9 @@ export default{
                 .then(res=>{
                     console.log(res)
                     if(res.status===200&&res.data!=="user not found"){
-                        localStorage.setItem("token", res.data);
+                        localStorage.setItem("token", res.data.token);
+                        localStorage.setItem("userName", res.data.name)
+                        localStorage.setItem("userMoney", res.data.money)
                         router.push({path:"/index/sport/basketball"})
                         displayerror.value = false;
                     }else{

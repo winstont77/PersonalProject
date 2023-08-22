@@ -12,7 +12,8 @@ namespace BetServer.Controllers
     public class BetRequest
     {
         public Bet Bet { get; set; }
-        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public int EventId { get; set; }
     }
 
     [Route("api/[controller]")]
@@ -32,7 +33,7 @@ namespace BetServer.Controllers
         {
             try
             {
-                var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Id == betRequest.UserId);
+                var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Name == betRequest.UserName);
 
                 user.Bets.Add(betRequest.Bet);
                 db.SaveChanges();

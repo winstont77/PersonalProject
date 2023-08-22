@@ -63,30 +63,27 @@ namespace BetServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventsId = table.Column<int>(type: "int", nullable: true),
+                    EventId = table.Column<int>(type: "int", nullable: false),
                     DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Money = table.Column<int>(type: "int", nullable: false),
+                    AwayTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AwayTeamOdds = table.Column<float>(type: "real", nullable: false),
+                    HomeTeamOdds = table.Column<float>(type: "real", nullable: false),
+                    Sports = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BetTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BetTeamOdds = table.Column<float>(type: "real", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bets_Events_EventsId",
-                        column: x => x.EventsId,
-                        principalTable: "Events",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Bets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bets_EventsId",
-                table: "Bets",
-                column: "EventsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bets_UserId",
@@ -107,10 +104,10 @@ namespace BetServer.Migrations
                 name: "Bets");
 
             migrationBuilder.DropTable(
-                name: "Sports");
+                name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "Sports");
 
             migrationBuilder.DropTable(
                 name: "Users");

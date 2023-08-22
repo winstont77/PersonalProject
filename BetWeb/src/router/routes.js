@@ -35,6 +35,14 @@ const routes = [
         path:"/signin",
         component:()=>import("../pages/signin.vue")
     },
+    {
+        path:"/backendManager/signin",
+        component:()=>import("../backendManager/signin.vue")
+    },
+    {
+        path:"/backendManager/index",
+        component:()=>import("../backendManager/index.vue")
+    },
 ]
 
 export default routes;

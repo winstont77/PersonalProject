@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static BetServer.Controllers.UsersController;
 
 namespace BetServer.Controllers
 {
@@ -100,7 +101,12 @@ namespace BetServer.Controllers
             // 產出序列化的 JWT Token 字串
             var serializeToken = tokenHandler.WriteToken(securityToken);
 
-            return new ContentResult() { Content = serializeToken };
+            return Ok(new 
+            {
+                Token = serializeToken,
+                Name = signIn.Name,
+                Money = db.Users.FirstOrDefault(u => u.Name == signIn.Name).Money
+            });
         }
 
         //// To generate token

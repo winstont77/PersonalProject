@@ -15,25 +15,28 @@ let betResultButton = (display, sureOrCancel)=>{
     if(sureOrCancel===true){
         axios.post("https://localhost:7099/PostBets",{
             "Bet": {
-                    "events": {
-                    "id": prop.event.id,
-                    "awayTeamName": prop.event.awayTeamName,
-                    "homeTeamName": prop.event.homeTeamName,
-                    "awayTeamOdds": prop.event.awayTeamOdds,
-                    "homeTeamOdds": prop.event.homeTeamOdds,
-                    "sports": prop.event.sports,
-                    "dateTime": prop.event.dateTime
-                },
-                "dateTime": getCurrentDateInFormat().toString(),
-                "money": 0
+                "EventId":prop.event.id,
+                "DateTime": getCurrentDateInFormat().toString(),
+                "Money": betMoney.value,
+                "AwayTeamName":prop.event.awayTeamName,
+                "AwayTeamOdds":prop.event.awayTeamOdds,
+                "HomeTeamName":prop.event.homeTeamName,
+                "HomeTeamOdds":prop.event.homeTeamOdds,
+                "Sports":prop.event.sports,
+                "BetTeamOdds":prop.odds,
+                "BetTeamName":prop.team
             },
-            "UserId":1
+            "UserName":localStorage.getItem("userName"),
+            "EventId":prop.event.id
         },{
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }})
         .then(res=>{
+            console.log(prop.event)
             console.log(res)
+            console.log(prop.odds)
+            console.log(prop.team)
         }).catch(err=>{
             console.log(err)
             localStorage.removeItem("token")
@@ -75,7 +78,7 @@ let updateBetMoney = (event) => {
     betMoney.value = event.target.value;
 }
 
-let betMoney = ref(1);
+let betMoney = ref(100);
 
 </script>
 
@@ -97,7 +100,7 @@ let betMoney = ref(1);
             </table>
         </div>
         <div style="display: flex;">
-            <input type="range" class="betmoneyinputrange" min="100" max="500" value="50" v-on:input="updateBetMoney">
+            <input type="range" class="betmoneyinputrange" min="100" max="5000" step="100" value="50" v-on:input="updateBetMoney">
         </div>
         <div class="betResult-content-surebutton">
             <div class="betResult-content-surebutton-content">

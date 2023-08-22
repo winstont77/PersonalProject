@@ -6,6 +6,8 @@ import axios from 'axios';
 
 export default{
     setup(){
+        let username = ref(localStorage.getItem("userName"))
+        let usermoney = ref(localStorage.getItem("userMoney"))
         let mainHeaderRHSLoggedOutWideContainer = ref(true);
         let membersMenuModuleContainer_DarkWash = ref(false);
         let signupButton=()=>{
@@ -34,7 +36,7 @@ export default{
             if(localStorage.getItem("token")!==null){
                 mainHeaderRHSLoggedOutWideContainer.value = false
                 axios.post("https://localhost:7099/PostMemberDetail",{
-                    Name:"w"
+                    Name:localStorage.getItem("userName")
                 },{
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -47,9 +49,9 @@ export default{
                     console.log(err)
                 })
             }
-            console.log(localStorage.getItem("token"))
+            // console.log(localStorage.getItem("token"))
         })
-        return {signupButton, signinButton, myBet, sportBet, clickMember, mainHeaderRHSLoggedOutWideContainer, membersMenuModuleContainer_DarkWash}
+        return {signupButton, signinButton, myBet, sportBet, clickMember, mainHeaderRHSLoggedOutWideContainer, membersMenuModuleContainer_DarkWash, username, usermoney}
     }
 }
 </script>
@@ -65,9 +67,9 @@ export default{
                                     <div class="um-Header_LeftSideWrapper ">
                                         <div class="um-UserInfo ">
                                             <div class="um-UserInfo_AccountInfo ">
-                                                <span class="um-UserInfo_UserName ">winstont77</span>
+                                                <span class="um-UserInfo_UserName ">{{username}}</span>
                                                 <span class="um-UserInfo_AccountBalanceWrapper ">
-                                                    <span class="um-UserInfo_Balance ">NT$0.00</span>
+                                                    <span class="um-UserInfo_Balance ">NT${{ usermoney }}.00</span>
                                                 </span>
                                             </div>
                                         </div>

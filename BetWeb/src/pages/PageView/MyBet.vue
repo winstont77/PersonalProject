@@ -6,19 +6,31 @@ import router from "../../router/router.js"
 
 export default{
     setup() {
+        let betHistory = ref([]);
         onMounted(()=>{
-            axios.get("https://localhost:7099/GetUserDetail",{
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }})
+            axios.post("https://localhost:7099/PostMemberDetail",{
+                Name:localStorage.getItem("userName")
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
             .then(res=>{
                 console.log(res)
+                if(res.data.bet.length>0){
+                    console.log(res)
+                    res.data.bet.forEach(element => {
+                        betHistory.value.push(element)
+                    });
+                }
             })
             .catch(err=>{
                 console.log(err)
                 router.push({path:"/signin"})
             })
         })
+        return {betHistory}
     },
     components: {  }
 }
@@ -41,9 +53,30 @@ export default{
                             <div>
                                 <div class="myb-MyBets_Container">
                                     <div class="myb-BetItemsContainer_EmptyMessage">
-                                        <div class="myb-BetItemsContainer_NoBetsMessageLineOne">
+                                        <!-- <div class="myb-BetItemsContainer_NoBetsMessageLineOne">
                                             當前無投注可顯示
-                                        </div>
+                                        </div> -->
+                                        <table class="sgl-MarketFixtureDetailsLabel-table">
+                                            <tr style="background-color: #222;" class="sgl-MarketFixtureDetailsLabel-table-header">
+                                                <th>押注日期</th>
+                                                <th>押注時間</th>
+                                                <th>押注隊伍</th>
+                                                <th>押注賠率</th>
+                                                <th>比賽隊伍</th>
+                                                <th>比賽賠率</th>
+                                            </tr>
+                                            <tr v-for="(item, index) in betHistory" class="sgl-MarketFixtureDetailsLabel-table-content">
+                                                <td><div>{{ item.dateTime.split('T')[0] }}</div></td>
+                                                <td>{{ item.dateTime.split('T')[1].split('Z')[0] }}</td>
+                                                <td>{{ item.betTeamName }}</td>
+                                                <td>{{ item.betTeamOdds }}</td>
+                                                <td style="display: flex;">
+                                                    <span v-on:click="selectTeam(index, item.awayTeamName, item.awayTeamOdds)" style="width: 40%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
+                                                    <span style="width: 20%;">vs</span> 
+                                                    <span v-on:click="selectTeam(index, item.homeTeamName, item.homeTeamOdds)" class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 40%;">{{ item.homeTeamName }}</span></td>
+                                                <td>{{ item.awayTeamOdds }} : {{ item.homeTeamOdds }}</td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
