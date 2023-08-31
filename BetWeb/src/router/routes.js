@@ -22,8 +22,8 @@ const routes = [
                 component: ()=>import("../pages/PageView/MyBet.vue")
             },
             {
-                path:'/backendManage',
-                component:()=>import("../pages/PageView/BackendManage.vue")
+                path: "tappay",
+                component: ()=>import("../pages/PageView/tappay/tappay.vue")
             }
         ]
     },
@@ -39,9 +39,20 @@ const routes = [
         path:"/backendManager/signin",
         component:()=>import("../backendManager/signin.vue")
     },
+    /*後臺路由*/
     {
         path:"/backendManager/index",
-        component:()=>import("../backendManager/index.vue")
+        component:()=>import("../backendManager/index.vue"),
+        children:[
+            {
+                path:"dashboard",
+                component:()=>import("../backendManager/content/dashboard.vue")
+            },
+            {
+                path:"tablelist",
+                component:()=>import("../backendManager/content/tablelist.vue")
+            }
+        ]
     },
 ]
 

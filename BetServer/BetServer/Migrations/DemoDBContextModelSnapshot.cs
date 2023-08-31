@@ -37,6 +37,9 @@ namespace BetServer.Migrations
                     b.Property<float>("AwayTeamOdds")
                         .HasColumnType("real");
 
+                    b.Property<bool>("BetStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("BetTeamName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -83,6 +86,9 @@ namespace BetServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AwayTeamMoney")
+                        .HasColumnType("int");
+
                     b.Property<string>("AwayTeamName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -90,9 +96,21 @@ namespace BetServer.Migrations
                     b.Property<float>("AwayTeamOdds")
                         .HasColumnType("real");
 
+                    b.Property<float>("AwayTeamPoint")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("AwayTeamScore")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("CloseEvent")
+                        .HasColumnType("bit");
+
                     b.Property<string>("DateTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HomeTeamMoney")
+                        .HasColumnType("int");
 
                     b.Property<string>("HomeTeamName")
                         .IsRequired()
@@ -101,7 +119,24 @@ namespace BetServer.Migrations
                     b.Property<float>("HomeTeamOdds")
                         .HasColumnType("real");
 
+                    b.Property<float>("HomeTeamPoint")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("HomeTeamScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoseTeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Point")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Sports")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WinTeamName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -145,6 +180,9 @@ namespace BetServer.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Profit")
+                        .HasColumnType("int");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");

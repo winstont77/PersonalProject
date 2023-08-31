@@ -89,7 +89,7 @@ namespace BetServer.Controllers
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://odds.p.rapidapi.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=decimal&markets=h2h&dateFormat=iso"),
+                RequestUri = new Uri("https://odds.p.rapidapi.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=decimal&markets=h2h%2Cspreads&dateFormat=iso"),
                 Headers =
                 {
                     { "X-RapidAPI-Key", "f55cb06f51mshb6a086cd7f7c47fp136fa1jsn695f0499478f" },
@@ -190,6 +190,7 @@ namespace BetServer.Controllers
                 }
                 db.SaveChanges();
                 return Ok(db.Events);
+                //return Ok(events);
             }
             catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
             {

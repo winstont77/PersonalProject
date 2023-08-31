@@ -20,8 +20,18 @@ namespace BetServer.Migrations
                     HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AwayTeamOdds = table.Column<float>(type: "real", nullable: false),
                     HomeTeamOdds = table.Column<float>(type: "real", nullable: false),
+                    AwayTeamPoint = table.Column<float>(type: "real", nullable: false),
+                    HomeTeamPoint = table.Column<float>(type: "real", nullable: false),
                     Sports = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DateTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CloseEvent = table.Column<bool>(type: "bit", nullable: false),
+                    WinTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoseTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AwayTeamScore = table.Column<int>(type: "int", nullable: true),
+                    HomeTeamScore = table.Column<int>(type: "int", nullable: true),
+                    AwayTeamMoney = table.Column<int>(type: "int", nullable: false),
+                    HomeTeamMoney = table.Column<int>(type: "int", nullable: false),
+                    Point = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,6 +60,7 @@ namespace BetServer.Migrations
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Money = table.Column<int>(type: "int", nullable: true),
+                    Profit = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -73,6 +84,7 @@ namespace BetServer.Migrations
                     Sports = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BetTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BetTeamOdds = table.Column<float>(type: "real", nullable: false),
+                    BetStatus = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

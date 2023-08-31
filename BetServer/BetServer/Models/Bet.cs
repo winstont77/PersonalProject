@@ -16,6 +16,6 @@ namespace BetServer.Models
         public string Sports { get; set; }
         public string BetTeamName { get; set; }
         public float BetTeamOdds { get;set; }
-
+        public bool BetStatus { get; set; } = false;
     }
 }

@@ -93,7 +93,7 @@ namespace BetServer.Controllers
                 Issuer = _config["Jwt:Issuer"],
                 Audience = _config["Jwt:Audience"],
                 Subject = userClaims,
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.Now.AddMinutes(20),
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
             };
             // 產出所需要的 JWT Token 物件
@@ -105,7 +105,8 @@ namespace BetServer.Controllers
             {
                 Token = serializeToken,
                 Name = signIn.Name,
-                Money = db.Users.FirstOrDefault(u => u.Name == signIn.Name).Money
+                Money = db.Users.FirstOrDefault(u => u.Name == signIn.Name).Money,
+                Profit = db.Users.FirstOrDefault(u=>u.Name == signIn.Name).Profit,
             });
         }
 
@@ -157,8 +158,17 @@ namespace BetServer.Controllers
             {
                 Name = user.Name,
                 Money = user.Money,
+                Profit = user.Profit,
                 Bet = user.Bets
             });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("/GetSelectTeam")]
+        public async Task<IActionResult> GetSelectTeam()
+        {
+            return Ok("");
         }
     }
 }

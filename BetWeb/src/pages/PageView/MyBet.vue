@@ -62,6 +62,7 @@ export default{
                                                 <th>押注時間</th>
                                                 <th>押注隊伍</th>
                                                 <th>押注賠率</th>
+                                                <th>押注金額</th>
                                                 <th>比賽隊伍</th>
                                                 <th>比賽賠率</th>
                                             </tr>
@@ -70,10 +71,11 @@ export default{
                                                 <td>{{ item.dateTime.split('T')[1].split('Z')[0] }}</td>
                                                 <td>{{ item.betTeamName }}</td>
                                                 <td>{{ item.betTeamOdds }}</td>
+                                                <td>{{ item.money }}</td>
                                                 <td style="display: flex;">
-                                                    <span v-on:click="selectTeam(index, item.awayTeamName, item.awayTeamOdds)" style="width: 40%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
+                                                    <span style="width: 40%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
                                                     <span style="width: 20%;">vs</span> 
-                                                    <span v-on:click="selectTeam(index, item.homeTeamName, item.homeTeamOdds)" class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 40%;">{{ item.homeTeamName }}</span></td>
+                                                    <span class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 40%;">{{ item.homeTeamName }}</span></td>
                                                 <td>{{ item.awayTeamOdds }} : {{ item.homeTeamOdds }}</td>
                                             </tr>
                                         </table>

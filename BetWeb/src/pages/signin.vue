@@ -81,7 +81,8 @@ export default{
                         localStorage.setItem("token", res.data.token);
                         localStorage.setItem("userName", res.data.name)
                         localStorage.setItem("userMoney", res.data.money)
-                        router.push({path:"/index/sport/basketball"})
+                        localStorage.setItem("userProfit", res.data.profit)
+                        router.push({path:"/index/myBet"})
                         displayerror.value = false;
                     }else{
                         // alert("failed")

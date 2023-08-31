@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { reactive } from 'vue';
 import axios from 'axios'
 import BetResult from '../../../components/BetResult.vue';
+import router from '../../../router/router';
 
 
 export default{
@@ -13,6 +14,18 @@ export default{
         let selectteamname = ref("")
         let selectevent = ref({})
         let selectTeam = (index, awayOrHome, odds) => {
+            
+            axios.get("https://localhost:7099/GetSelectTeam",{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }}).then(res=>{
+                console.log(res)
+            }).catch(err=>{
+                console.log(err)
+                router.push({path:"/signin"})
+            })
+
+
             console.log(index, awayOrHome, odds);
             selectodds.value = odds
             selectteamname.value = awayOrHome
@@ -38,6 +51,25 @@ export default{
                 .catch(err => {
                 console.log(err);
             });
+            axios.post("https://localhost:7099/PostMemberDetail",{
+                    Name:localStorage.getItem("userName")
+                },{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }).then(res=>{
+                    console.log(res)
+                    localStorage.removeItem("userMoney")
+                    localStorage.removeItem("userProfit")
+                    localStorage.setItem("userMoney", res.data.money)
+                    localStorage.setItem("userProfit", res.data.profit)
+                    console.log(localStorage)
+                    // location.reload();
+                }).catch(err=>{
+                    console.log(err)
+                    // router.push({path:"/index/myBet"})
+                    // location.reload();
+                })
         });
         return { schedule, displayBetResult, selectodds, selectteamname, selectevent, selectTeam, handleBetResultEmit };
     },
@@ -98,13 +130,15 @@ export default{
                                             <th>隊伍</th>
                                             <th>賠率</th>
                                         </tr>
-                                        <tr v-for="(item, index) in schedule" class="sgl-MarketFixtureDetailsLabel-table-content">
+                                        <tr v-for="(item, index) in schedule" class="sgl-MarketFixtureDetailsLabel-table-content" v-show="!item.closeEvent">
                                             <td><div>{{ item.dateTime.split('T')[0] }}</div></td>
                                             <td>{{ item.dateTime.split('T')[1].split('Z')[0] }}</td>
                                             <td style="display: flex;">
-                                                <span v-on:click="selectTeam(index, item.awayTeamName, item.awayTeamOdds)" style="width: 40%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
+                                                <span v-on:click="selectTeam(index, item.awayTeamName, item.awayTeamOdds)" style="width: 35%;" class="gl-MarketFixtureDetailsLabel-table-content-away">{{ item.awayTeamName }} </span>
+                                                <span style="width: 5%;">{{ item.awayTeamPoint }}</span>
                                                 <span style="width: 20%;">vs</span> 
-                                                <span v-on:click="selectTeam(index, item.homeTeamName, item.homeTeamOdds)" class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 40%;">{{ item.homeTeamName }}</span></td>
+                                                <span style="width: 5%;">{{ item.homeTeamPoint }}</span>
+                                                <span v-on:click="selectTeam(index, item.homeTeamName, item.homeTeamOdds)" class="gl-MarketFixtureDetailsLabel-table-content-home" style="width: 35%;">{{ item.homeTeamName }}</span></td>
                                             <td>{{ item.awayTeamOdds }} : {{ item.homeTeamOdds }}</td>
                                         </tr>
                                     </table>

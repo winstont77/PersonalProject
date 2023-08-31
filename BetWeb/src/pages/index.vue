@@ -8,8 +8,10 @@ export default{
     setup(){
         let username = ref(localStorage.getItem("userName"))
         let usermoney = ref(localStorage.getItem("userMoney"))
+        let userprofit = ref(localStorage.getItem("userProfit"))
         let mainHeaderRHSLoggedOutWideContainer = ref(true);
         let membersMenuModuleContainer_DarkWash = ref(false);
+        
         let signupButton=()=>{
             router.push({path:"/signup"})
         }
@@ -24,12 +26,20 @@ export default{
         }
 
         let sportBet = ()=>{
-            router.push({path:"/index/sport"})
+            router.push({path:"/index/sport/basketball"})
         }
 
         let clickMember = ()=>{
             console.log(membersMenuModuleContainer_DarkWash.value)
             membersMenuModuleContainer_DarkWash.value =! membersMenuModuleContainer_DarkWash.value
+        }
+
+        let signout = ()=>{
+            localStorage.removeItem("userName")
+            localStorage.removeItem("token")
+            localStorage.removeItem("userMoney")
+            localStorage.removeItem("userProfit")
+            router.push({path:"/signin"})
         }
         
         onMounted(()=>{
@@ -44,6 +54,8 @@ export default{
                 })
                 .then(res=>{
                     console.log(res)
+                    usermoney.value = res.data.money
+                    userprofit.value = res.data.profit
                 })
                 .catch(err=>{
                     console.log(err)
@@ -51,7 +63,7 @@ export default{
             }
             // console.log(localStorage.getItem("token"))
         })
-        return {signupButton, signinButton, myBet, sportBet, clickMember, mainHeaderRHSLoggedOutWideContainer, membersMenuModuleContainer_DarkWash, username, usermoney}
+        return {signupButton, signinButton, myBet, sportBet, clickMember, signout, mainHeaderRHSLoggedOutWideContainer, membersMenuModuleContainer_DarkWash, username, usermoney, userprofit}
     }
 }
 </script>
@@ -67,16 +79,32 @@ export default{
                                     <div class="um-Header_LeftSideWrapper ">
                                         <div class="um-UserInfo ">
                                             <div class="um-UserInfo_AccountInfo ">
-                                                <span class="um-UserInfo_UserName ">{{username}}</span>
+                                                <span class="um-UserInfo_UserName ">投注金額</span>
                                                 <span class="um-UserInfo_AccountBalanceWrapper ">
-                                                    <span class="um-UserInfo_Balance ">NT${{ usermoney }}.00</span>
+                                                    <span class="um-UserInfo_Balance ">NT ${{ usermoney }}.00</span>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="um-Header_RightSideWrapper ">
                                         <div class="um-DepositButton ">
-                                            存款
+                                            支付
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="um-BalanceDropdown">
+                                    <div class="um-BalanceDropdown_Container ">
+                                        <div class="um-BalanceDropdown_LeftColumn ">
+                                            <div class="um-BalanceDropdown_Cell">
+                                                <div class="um-BalanceDropdown_Title ">獎金</div>
+                                                <div class="um-BalanceDropdown_Value ">NT$ {{ userprofit }}.00</div>
+                                            </div>
+                                        </div>
+                                        <div class="um-BalanceDropdown_RightColumn ">
+                                            <!-- <div class="um-BalanceDropdown_Cell-bonus">
+                                                <div class="um-BalanceDropdown_Title ">可提款額</div>
+                                                <div class="um-BalanceDropdown_Value ">NT$0.00</div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -84,9 +112,24 @@ export default{
                             <div class="um-MemberMenuModule_AreaPlaceholder ">
                                 <div class="um-MainMenu ">
                                     <div class="um-GeneralTab ">
+                                        <div class="um-GeneralTab_AccountContainer">
+                                            <div class="ul-MembersLinkButton">
+                                                <div class="ul-MembersLinkButton_Icon"></div>
+                                                <div class="ul-MembersLinkButton_Text-2">活動</div>
+                                            </div>
+                                            <div class="ul-MembersLinkButton">
+                                                <div class="ul-MembersLinkButton_Icon"></div>
+                                                <div class="ul-MembersLinkButton_Text-2">歷史</div>
+                                            </div>
+                                            <div class="ul-MembersLinkButton">
+                                                <div class="ul-MembersLinkButton_Icon"></div>
+                                                <div class="ul-MembersLinkButton_Text-2">信用卡</div>
+                                            </div>
+                                            <div class="ul-MembersLinkButton"></div>
+                                        </div>
                                         <div class="um-GeneralTab_LogoutOption ">
                                             <div class="ul-MembersLinkButton-wide">
-                                                <div class="ul-MembersLinkButton_Text ">登出</div>
+                                                <div v-on:click="signout" class="ul-MembersLinkButton_Text ">登出</div>
                                             </div>
                                         </div>
                                     </div>
@@ -382,6 +425,55 @@ export default{
     background-image: url(../images/topUp.svg);
 }
 
+.um-BalanceDropdown{
+    width: 100%;
+    padding: 0 15px 5px;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.um-BalanceDropdown_Container{
+    position: relative;
+    display: flex;
+}
+
+.um-BalanceDropdown_LeftColumn {
+    display: flex;
+    flex-flow: column;
+}
+
+.um-BalanceDropdown_Cell{
+    margin-top: 0;
+    margin-bottom: 15px;
+    display: inline-block;
+    padding-right: 70px;
+}
+
+.um-BalanceDropdown_Title {
+    line-height: 17px;
+    font-size: 11px;
+    color: #404040;
+    white-space: nowrap;
+}
+
+.um-BalanceDropdown_Value {
+    line-height: 20px;
+    font-size: 15px;
+    color: #404040;
+    font-weight: 700;
+}
+
+.um-BalanceDropdown_RightColumn {
+    display: flex;
+    flex-flow: column;
+}
+
+.um-BalanceDropdown_Cell-bonus{
+    margin-top: 0;
+    margin-bottom: 15px;
+    display: inline-block;
+    padding-right: 70px;
+}
+
 .um-MemberMenuModule_AreaPlaceholder {
 
 }
@@ -393,6 +485,52 @@ export default{
 .um-GeneralTab {
     display: flex;
     flex-wrap: wrap;
+}
+
+.um-GeneralTab_AccountContainer{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #f3f5f4;
+    padding: 20px 0 10px 5px;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.ul-MembersLinkButton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #505050;
+    line-height: 17px;
+    margin-right: 5px;
+    padding-bottom: 20px;
+    min-width: 100px;
+    cursor: pointer;
+    text-align: center;
+    flex: 1 0 31%;
+    max-width: 31%;
+}
+
+.ul-MembersLinkButton_Icon{
+    height: 39px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.ul-MembersLinkButton_Text-2 {
+    width: 100%;
+    word-break: break-word;
+    word-wrap: break-word;
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #505050;
+    line-height: 17px;
 }
 
 .um-GeneralTab_LogoutOption {
