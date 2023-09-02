@@ -7,5 +7,6 @@ namespace BetServer.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+
     }
 }
