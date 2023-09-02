@@ -1,58 +1,30 @@
 const routes = [
+    /* 前台 */
     {
-        path:"/index",
-        component:()=>import("../pages/index.vue"),
-        children:[
-            // {
-            //     path: 'basketball',
-            //     component: ()=>import("../pages/sports/basketball/basketball.vue")
-            // },
-            {
-                path: 'sport',
-                component: ()=>import("../pages/PageView/SportBet.vue"),
-                children:[
-                    {
-                        path: 'basketball',
-                        component: ()=>import("../pages/sports/basketball/basketball.vue")
-                    }
-                ]
-            },
-            {
-                path: 'myBet',
-                component: ()=>import("../pages/PageView/MyBet.vue")
-            },
-            {
-                path: "tappay",
-                component: ()=>import("../pages/PageView/tappay/tappay.vue")
-            }
-        ]
+        path:"/envTest",
+        component:()=>import("../pages/ForeGround/envTest.vue"),
     },
     {
-        path:"/signup",
-        component:()=>import("../pages/signup.vue")
+        path:"/sports/basketball",
+        component:()=>import("../pages/ForeGround/sports/basketball.vue"),
+    },
+    {
+        path:"/signout",
+        component:()=>import("../pages/signout.vue"),
     },
     {
         path:"/signin",
-        component:()=>import("../pages/signin.vue")
+        component:()=>import("../pages/signin.vue"),
     },
     {
-        path:"/backendManager/signin",
-        component:()=>import("../backendManager/signin.vue")
+        path:"/signup",
+        component:()=>import("../pages/signup.vue"),
     },
-    /*後臺路由*/
+    /* 後台 */
+    /* 資料來源 */
     {
-        path:"/backendManager/index",
-        component:()=>import("../backendManager/index.vue"),
-        children:[
-            {
-                path:"dashboard",
-                component:()=>import("../backendManager/content/dashboard.vue")
-            },
-            {
-                path:"tablelist",
-                component:()=>import("../backendManager/content/tablelist.vue")
-            }
-        ]
+        path:"/sportData",
+        component:()=>import("../pages/SportData/sportData.vue"),
     },
 ]
 

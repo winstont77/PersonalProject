@@ -6,105 +6,18 @@ import axios from "axios"
 
 export default{
     setup(){
-        let checkbox = ref(false)
         let username = ref("")
         let password = ref(null)
-        let displayerror = ref(false);
-        let exclamationSignName=()=>{
-            document.getElementById("oam-FieldInputNewUsername_Tooltip").style="display: block"
-            setTimeout(() => {
-                document.getElementById("oam-FieldInputNewUsername_Tooltip").style="display: none"
-            }, 2000);
-        }
-
-        let exclamationSignPassword=()=>{
-            document.getElementById("oam-FieldInputNewPassword_Tooltip").style="display: block"
-            setTimeout(() => {
-                document.getElementById("oam-FieldInputNewPassword_Tooltip").style="display: none"
-            }, 2000);
-        }
-
-        let focusName=()=>{
-            document.getElementById("oam-FieldInputNewUsername_InputRow").style = "box-shadow: 0 1px 0 0 #2ec193;"
-            document.getElementById("oam-FieldInputNewPassword_InputRow").style = "box-shadow: 0 1px 0 0 #d4d4d4;"
-        }
-
-        let focusPassword=()=>{
-            document.getElementById("oam-FieldInputNewUsername_InputRow").style = "box-shadow: 0 1px 0 0 #d4d4d4;"
-            document.getElementById("oam-FieldInputNewPassword_InputRow").style = "box-shadow: 0 1px 0 0 #2ec193;"
-        }
-
-        let checkTerms=()=>{
-            let parentElement = document.getElementById("oam-FieldInputCheckboxTerms_Checkbox"); // 替換成您的實際父元素的 ID
-
-            if (parentElement) {
-                if(!checkbox.value){
-                    parentElement.style.position = "relative"; // 確保父元素有定位，以便 ::after 生效
-                    parentElement.style.setProperty("--custom-background-image", "url(/src/images/check.svg)");
-                    parentElement.style.setProperty("--custom-background-color", "#126e51");
-                    parentElement.style.setProperty("--custom-background-size", "8px");
-                    parentElement.style.setProperty("--custom-background-position", "50%");
-                    parentElement.style.setProperty("--custom-background-repeat", "no-repeat");
-                }else{
-                    parentElement.style.position = "relative"; // 確保父元素有定位，以便 ::after 生效
-                    parentElement.style.setProperty("--custom-background-image", "");
-                    parentElement.style.setProperty("--custom-background-color", "");
-                    parentElement.style.setProperty("--custom-background-size", "");
-                    parentElement.style.setProperty("--custom-background-position", "");
-                    parentElement.style.setProperty("--custom-background-repeat", "");
-                }
-                checkbox.value=!checkbox.value
-            }
-        }
-
-        let displayPassword = ()=>{
-            if(document.getElementById("oam-FieldInputNewPassword_Input").type === 'password'){
-                document.getElementById("oam-FieldInputNewPassword_Input").type = 'text'
-            }else{
-                document.getElementById("oam-FieldInputNewPassword_Input").type = 'password'
-            }
-        }
-
-        let gotoIndex = ()=>{
-            router.push({path:"/index/sport/basketball"})
-        }
-
         let signup = ()=>{
-            axios.post("https://localhost:7099/PostUsers",{
-                Name:username.value,
-                Password:password.value,
-                Money:0,
-            })
-            .then(res=>{
-                console.log(res)
-                if(res.status===200){
-                    router.push({path:"/index/sport/basketball"})
-                }else{
-                    alert("failed")
-                }
-            })
-            .catch(err=>{
-                console.log(err)
-                displayerror.value = true
-            })
             console.log(username.value, password.value)
         }
-        
         onMounted(()=>{
             
         })
         return {
-            exclamationSignName, 
-            exclamationSignPassword, 
-            focusName, 
-            focusPassword, 
-            checkTerms, 
-            displayPassword, 
-            gotoIndex,
-            signup,
-            displayerror,
             username,
-            password
+            password,
+            signup
         }
     }
 }
@@ -182,7 +95,7 @@ export default{
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="signuperrorprompt" v-show="displayerror">使用者名稱重複</div>
+                                        <div class="signuperrorprompt">使用者名稱重複</div>
                                         <button class="oam-OAFieldSubmitButton " v-on:click="signup">加入</button>
                                     </div>
                                 </div>
@@ -210,7 +123,7 @@ export default{
     position: relative;
     display: flex;
     height: 50px;
-    background-color: #126e51;
+    background-color: #FF6B0F;
     justify-content: space-between;
 }
 
@@ -421,7 +334,7 @@ export default{
     border-radius: 0;
     display: flex;
     align-items: center;
-    color: #007a56;
+    color: #FF6B0F;
 }
 
 .oam-FieldInputNewPassword_InfoAnchor {
@@ -554,7 +467,7 @@ export default{
     font-weight: 700;
     text-align: center;
     color: #fff;
-    background-color: #126e51;
+    background-color: #FF6B0F;
 }
 
 .oam-FieldInputCheckboxTerms_Label {
@@ -566,7 +479,7 @@ export default{
 }
 
 .oam-FieldInputCheckboxTerms_Link{
-    color: #007a56;
+    color: #FF6B0F;
     font-weight: 700;
     text-decoration: none;
     cursor: pointer;
