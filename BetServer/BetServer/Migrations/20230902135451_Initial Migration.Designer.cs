@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230902082009_Initial Migration")]
+    [Migration("20230902135451_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -39,9 +39,14 @@ namespace BetServer.Migrations
                     b.Property<int?>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bets");
                 });
@@ -107,14 +112,53 @@ namespace BetServer.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("BetServer.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Money")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Profit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("BetServer.Model.Bet", b =>
                 {
                     b.HasOne("BetServer.Model.Event", null)
                         .WithMany("Bets")
                         .HasForeignKey("EventId");
+
+                    b.HasOne("BetServer.Model.User", null)
+                        .WithMany("Bets")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BetServer.Model.Event", b =>
+                {
+                    b.Navigation("Bets");
+                });
+
+            modelBuilder.Entity("BetServer.Model.User", b =>
                 {
                     b.Navigation("Bets");
                 });

@@ -1,12 +1,26 @@
 <script>
 import {onMounted, ref} from 'vue'
 import axios from "axios"
+import router from '../router/router'
 export default{
     setup(){
         let username = ref("")
         let password = ref(null)
-        let signin = ()=>{
+        let signin = async ()=>{
             console.log(username.value, password.value)
+            await axios.post(import.meta.env.VITE_API_URL + "/PostSignIn",{
+                Name: username.value,
+                Password: password.value
+            })
+            .then(res=>{
+                console.log(res)
+                localStorage.setItem("username", res.data.name)
+                localStorage.setItem("token", res.data.token)
+                router.push({path:"/index"})
+            })
+            .catch(err=>{
+                console.log(err)
+            })
         }
         onMounted(()=>{
         })
@@ -90,7 +104,7 @@ export default{
     position: relative;
     display: flex;
     height: 50px;
-    background-color: #FF6B0F;
+    background-color: #126e51;
     justify-content: space-between;
 }
 
@@ -301,7 +315,7 @@ export default{
     border-radius: 0;
     display: flex;
     align-items: center;
-    color: #FF6B0F;
+    color: #126e51;
 }
 
 .oam-FieldInputNewPassword_InfoAnchor {
@@ -434,7 +448,7 @@ export default{
     font-weight: 700;
     text-align: center;
     color: #fff;
-    background-color: #FF6B0F;
+    background-color: #126e51;
 }
 
 .oam-FieldInputCheckboxTerms_Label {

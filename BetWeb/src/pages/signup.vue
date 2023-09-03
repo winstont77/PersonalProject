@@ -10,6 +10,16 @@ export default{
         let password = ref(null)
         let signup = ()=>{
             console.log(username.value, password.value)
+            axios.post(import.meta.env.VITE_API_URL +　"/PostUsers", {
+                Name:username.value,
+                Password:password.value
+            })
+            .then(res=>{
+                console.log(res)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
         }
         onMounted(()=>{
             
@@ -123,7 +133,7 @@ export default{
     position: relative;
     display: flex;
     height: 50px;
-    background-color: #FF6B0F;
+    background-color: #126e51;
     justify-content: space-between;
 }
 
@@ -334,7 +344,7 @@ export default{
     border-radius: 0;
     display: flex;
     align-items: center;
-    color: #FF6B0F;
+    color: #126e51;
 }
 
 .oam-FieldInputNewPassword_InfoAnchor {

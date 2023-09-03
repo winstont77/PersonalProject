@@ -37,13 +37,31 @@ namespace BetServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Money = table.Column<int>(type: "int", nullable: true),
+                    Profit = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BetMoney = table.Column<double>(type: "float", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: true)
+                    EventId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,12 +71,22 @@ namespace BetServer.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Bets_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bets_EventId",
                 table: "Bets",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bets_UserId",
+                table: "Bets",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -69,6 +97,9 @@ namespace BetServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

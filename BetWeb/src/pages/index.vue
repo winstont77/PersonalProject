@@ -4,12 +4,49 @@ import axios from "axios"
 import router from '../router/router'
 export default{
     setup(){
-        let signin = ()=>{
-            router.push({path:"/signin"})
+        let username = ref("")
+        let displayUserDetailStatus = ref(false)
+        let changeDisplayUserDetailStatus = ()=>{
+            displayUserDetailStatus.value=!displayUserDetailStatus.value
+        }
+        let memberDetail = ()=>{
+            axios.post(import.meta.env.VITE_API_URL + "/PostUserDetail"
+            ,{Name:localStorage.getItem("username")}
+            ,{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            .then(res=>{
+                console.log(res)
+            })
+            .catch(err=>{
+                console.log(err)
+                router.push({path:"/signin"})
+            })
+        }
+        let signout = ()=>{
+            localStorage.removeItem("username")
+            localStorage.removeItem("token")
+            changeDisplayUserDetailStatus()
+            router.push({path:"/signout"})
         }
         onMounted(()=>{
+            memberDetail()
+            axios.get(import.meta.env.VITE_API_URL + "/GetBasketball")
+            .then(res=>{
+                console.log(res)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
         })
-        return {signin}
+        return {
+            username,
+            displayUserDetailStatus,
+            changeDisplayUserDetailStatus,
+            signout
+        }
     }
 }
 </script>
@@ -19,7 +56,7 @@ export default{
         <div class="wc-WebConsoleModule_Header">
             <div class="hm-HeaderModule">
                 <div>
-                    <div class="um-MemberMenuModule_WidthState-2">
+                    <div class="um-MemberMenuModule_WidthState-2" v-show="displayUserDetailStatus">
                         <div class="um-MemberMenuModule_Menu">
                             <div class="um-Header ">
                                 <div class="um-Header_InfoRow ">
@@ -54,7 +91,7 @@ export default{
                                     <div class="um-GeneralTab ">
                                         <div class="um-GeneralTab_LogoutOption ">
                                             <div class="ul-MembersLinkButton-wide">
-                                                <div class="ul-MembersLinkButton_Text ">登出</div>
+                                                <div class="ul-MembersLinkButton_Text" v-on:click="signout">登出</div>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +124,7 @@ export default{
                         <div class="hm-MainHeaderCentreWide_Link">
                             <div>體育投注</div>
                         </div>
-                        <div class="hm-MainHeaderCentreWide_Link">
+                        <div class="hm-MainHeaderCentreWide_Link" v-on:click="changeDisplayUserDetailStatus">
                             <div>我的投注</div>
                         </div>
                     </div>
@@ -95,12 +132,12 @@ export default{
                         <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer">
                             <div>註冊</div>
                         </div>
-                        <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer" v-on:click="signin">
+                        <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer">
                             <div>登錄</div>
                         </div>
                     </div>
                 </div>
-                <div class="hm-MembersMenuModuleContainer_DarkWash" style="display: none;"></div>
+                <div class="hm-MembersMenuModuleContainer_DarkWash" v-show="displayUserDetailStatus"></div>
             </div>
             <!-- <RouterView></RouterView> -->
         </div>
@@ -234,8 +271,7 @@ export default{
 .um-MemberMenuModule_WidthState-2{
     padding-bottom: 25px;
     text-align: right;
-    /* display: block; */
-    display: none;
+    display: block;
     position: absolute;
     width: 100%;
     max-width: 375px;
@@ -684,7 +720,8 @@ export default{
 }
 
 .hm-MainHeaderRHSLoggedOutWide {
-    display: flex;
+    display: none;
+    /* display: flex; */
     justify-content: flex-end;
     align-items: center;
     flex: 1 0 25%;

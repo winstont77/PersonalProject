@@ -20,6 +20,10 @@ const routes = [
         path:"/signup",
         component:()=>import("../pages/signup.vue"),
     },
+    {
+        path:"/index",
+        component:()=>import("../pages/index.vue"),
+    },
     /* 後台 */
     /* 資料來源 */
     {
