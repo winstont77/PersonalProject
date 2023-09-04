@@ -1,15 +1,18 @@
 <script>
 import {onMounted, ref} from 'vue'
 import axios from "axios"
-import router from '../router/router'
+import router from '../../router/router'
 export default{
     setup(){
         let signin = ()=>{
             router.push({path:"/signin"})
         }
+        let signup = ()=>{
+            router.push({path:"/signup"})
+        }
         onMounted(()=>{
         })
-        return {signin}
+        return {signin,signup}
     }
 }
 </script>
@@ -92,7 +95,7 @@ export default{
                         </div>
                     </div>
                     <div class="hm-MainHeaderRHSLoggedOutWide">
-                        <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer">
+                        <div class="hm-MainHeaderRHSLoggedOutWide_JoinContainer" v-on:click="signup">
                             <div>註冊</div>
                         </div>
                         <div class="hm-MainHeaderRHSLoggedOutWide_LoginContainer" v-on:click="signin">
@@ -646,7 +649,7 @@ export default{
     margin-left: 20px;
     width: 100px;
     background-size: contain;
-    background-image: url(../images/logos/indexLogo.svg);
+    background-image: url(../../images/logos/indexLogo.svg);
     cursor: pointer;
 }
 
@@ -1097,43 +1100,43 @@ export default{
 }
 
 #cis-ClassificationIconSmall-1{
-    background-image: url(../images/sideMenu/soccer.svg);
+    background-image: url(../../images/sideMenu/soccer.svg);
 }
 
 #cis-ClassificationIconSmall-2{
-    background-image: url(../images/sideMenu/football.svg);
+    background-image: url(../../images/sideMenu/football.svg);
 }
 
 #cis-ClassificationIconSmall-3{
-    background-image: url(../images/sideMenu/baseball.svg);
+    background-image: url(../../images/sideMenu/baseball.svg);
 }
 
 #cis-ClassificationIconSmall-4{
-    background-image: url(../images/sideMenu/basketball.svg);
+    background-image: url(../../images/sideMenu/basketball.svg);
 }
 
 #cis-ClassificationIconSmall-5{
-    background-image: url(../images/sideMenu/tabletennis.svg);
+    background-image: url(../../images/sideMenu/tabletennis.svg);
 }
 
 #cis-ClassificationIconSmall-6{
-    background-image: url(../images/sideMenu/icehockey.svg);
+    background-image: url(../../images/sideMenu/icehockey.svg);
 }
 
 #cis-ClassificationIconSmall-7{
-    background-image: url(../images/sideMenu/snooker.svg);
+    background-image: url(../../images/sideMenu/snooker.svg);
 }
 
 #cis-ClassificationIconSmall-8{
-    background-image: url(../images/sideMenu/volleyball.svg);
+    background-image: url(../../images/sideMenu/volleyball.svg);
 }
 
 #cis-ClassificationIconSmall-9{
-    background-image: url(../images/sideMenu/athletics.svg);
+    background-image: url(../../images/sideMenu/athletics.svg);
 }
 
 #cis-ClassificationIconSmall-10{
-    background-image: url(../images/sideMenu/greyhoundracing.svg);
+    background-image: url(../../images/sideMenu/greyhoundracing.svg);
 }
 
 .wcl-PageContainer{

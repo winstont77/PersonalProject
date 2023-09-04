@@ -6,62 +6,6 @@ export default{
         let events = ref([])
         onMounted(()=>{
             (async()=>{
-                // await axios.get("https://localhost:7099/GetSoccer")
-                // .then(res=>{
-                //     console.log(res)
-                //     res.data.forEach(element => {
-                //         events.push({
-                //             AwayTeamName:element.away_team,
-                //             HomeTeamName:element.home_team,
-                //             AwayTeamOdds:element.bookmakers[0].markets[0].outcomes[0].price,
-                //             HomeTeamOdds:element.bookmakers[0].markets[0].outcomes[1].price,
-                //             Sports:"soccer",
-                //             DateTime:element.commence_time
-                //         })
-                //     });
-                //     console.log(events)
-                // })
-                // .catch(err=>{
-                //     console.log(err)
-                // })
-
-                // await axios.get("https://localhost:7099/GetFootball")
-                // .then(res=>{
-                //     console.log(res)
-                //     res.data.forEach(element => {
-                //         events.push({
-                //             AwayTeamName:element.away_team,
-                //             HomeTeamName:element.home_team,
-                //             AwayTeamOdds:element.bookmakers[0].markets[0].outcomes[0].price,
-                //             HomeTeamOdds:element.bookmakers[0].markets[0].outcomes[1].price,
-                //             Sports:"football",
-                //             DateTime:element.commence_time
-                //         })
-                //     });
-                //     console.log(events)
-                // })
-                // .catch(err=>{
-                //     console.log(err)
-                // })
-
-                // await axios.get("https://localhost:7099/GetBaseball")
-                // .then(res=>{
-                //     console.log(res)
-                //     res.data.forEach(element => {
-                //         events.push({
-                //             AwayTeamName:element.away_team,
-                //             HomeTeamName:element.home_team,
-                //             AwayTeamOdds:element.bookmakers[0].markets[0].outcomes[0].price,
-                //             HomeTeamOdds:element.bookmakers[0].markets[0].outcomes[1].price,
-                //             Sports:"baseball",
-                //             DateTime:element.commence_time
-                //         })
-                //     });
-                //     console.log(events)
-                // })
-                // .catch(err=>{
-                //     console.log(err)
-                // })
 
                 await axios.get(import.meta.env.VITE_API_URL + "/GetBasketball")
                 .then(res=>{
@@ -85,20 +29,8 @@ export default{
                     console.log(err)
                 })
 
-                // axios.post("https://localhost:7099/PostSports",[
-                //     {Name:"soccer"},
-                //     {Name:"football"},
-                //     {Name:"baseball"},
-                //     {Name:"basketball"}
-                // ])
-                // .then(res=>{
-                //     console.log(res)
-                // })
-                // .catch(err=>{
-                //     console.log(err)
-                // })
 
-                await axios.post("https://localhost:7109/PostEvents",events.value)
+                await axios.post(import.meta.env.VITE_API_URL + "/PostEvents",events.value)
                 .then(res=>{
                     console.log(res)
                 })
@@ -107,18 +39,6 @@ export default{
                 })
             })()
 
-            // axios.post("https://localhost:7099/PostSports",[
-            //     {Name:"soccer"},
-            //     {Name:"football"},
-            //     {Name:"baseball"},
-            //     {Name:"basketball"}
-            // ])
-            // .then(res=>{
-            //     console.log(res)
-            // })
-            // .catch(err=>{
-            //     console.log(err)
-            // })
         })
     }
 }

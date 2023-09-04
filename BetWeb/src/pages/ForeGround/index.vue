@@ -1,10 +1,12 @@
 <script>
 import {onMounted, ref} from 'vue'
 import axios from "axios"
-import router from '../router/router'
+import router from '../../router/router'
 export default{
     setup(){
         let username = ref("")
+        let betMoney = ref(0)
+        let profit = ref(0)
         let displayUserDetailStatus = ref(false)
         let changeDisplayUserDetailStatus = ()=>{
             displayUserDetailStatus.value=!displayUserDetailStatus.value
@@ -19,6 +21,10 @@ export default{
             })
             .then(res=>{
                 console.log(res)
+                username.value = res.data.name
+                betMoney.value = res.data.money
+                profit.value = res.data.profit
+                console.log(betMoney.value)
             })
             .catch(err=>{
                 console.log(err)
@@ -30,6 +36,10 @@ export default{
             localStorage.removeItem("token")
             changeDisplayUserDetailStatus()
             router.push({path:"/signout"})
+        }
+
+        let goto = (value)=>{
+            router.push({path:`/index/${value}`})
         }
         onMounted(()=>{
             memberDetail()
@@ -44,8 +54,12 @@ export default{
         return {
             username,
             displayUserDetailStatus,
+            username,
+            betMoney,
+            profit,
             changeDisplayUserDetailStatus,
-            signout
+            signout,
+            goto
         }
     }
 }
@@ -65,7 +79,7 @@ export default{
                                             <div class="um-UserInfo_AccountInfo ">
                                                 <span class="um-UserInfo_UserName ">投注金額</span>
                                                 <span class="um-UserInfo_AccountBalanceWrapper ">
-                                                    <span class="um-UserInfo_Balance ">NT $00.00</span>
+                                                    <span class="um-UserInfo_Balance ">NT ${{ betMoney }}.00</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -78,7 +92,7 @@ export default{
                                         <div class="um-BalanceDropdown_LeftColumn ">
                                             <div class="um-BalanceDropdown_Cell">
                                                 <div class="um-BalanceDropdown_Title ">獎金</div>
-                                                <div class="um-BalanceDropdown_Value ">NT$ 00.00</div>
+                                                <div class="um-BalanceDropdown_Value ">NT$ {{ profit }}.00</div>
                                             </div>
                                         </div>
                                         <div class="um-BalanceDropdown_RightColumn ">
@@ -122,10 +136,10 @@ export default{
                     </div>
                     <div class="hm-MainHeaderCentreWide">
                         <div class="hm-MainHeaderCentreWide_Link">
-                            <div>體育投注</div>
+                            <div>投注歷史</div>
                         </div>
                         <div class="hm-MainHeaderCentreWide_Link" v-on:click="changeDisplayUserDetailStatus">
-                            <div>我的投注</div>
+                            <div>我的資料</div>
                         </div>
                     </div>
                     <div class="hm-MainHeaderRHSLoggedOutWide">
@@ -139,7 +153,6 @@ export default{
                 </div>
                 <div class="hm-MembersMenuModuleContainer_DarkWash" v-show="displayUserDetailStatus"></div>
             </div>
-            <!-- <RouterView></RouterView> -->
         </div>
         <div class="wc-PageView">
             <div class="wc-PageView_Main">
@@ -239,8 +252,8 @@ export default{
                         </div>
                     </div>
                     <div class="wcl-PageContainer">
-                        <!-- <div class="wcl-PageContainer_Colcontainer"></div> -->
-                        <!-- <RouterView></RouterView> -->
+                        <!---->
+                        <RouterView></RouterView>
                     </div>
                 </div>
             </div>
@@ -682,7 +695,7 @@ export default{
     margin-left: 20px;
     width: 100px;
     background-size: contain;
-    background-image: url(../images/logos/indexLogo.svg);
+    background-image: url(../../images/logos/indexLogo.svg);
     cursor: pointer;
 }
 
@@ -930,43 +943,43 @@ export default{
 }
 
 #cis-ClassificationIconSmall-1{
-    background-image: url(../images/sideMenu/soccer.svg);
+    background-image: url(../../images/sideMenu/soccer.svg);
 }
 
 #cis-ClassificationIconSmall-2{
-    background-image: url(../images/sideMenu/football.svg);
+    background-image: url(../../images/sideMenu/football.svg);
 }
 
 #cis-ClassificationIconSmall-3{
-    background-image: url(../images/sideMenu/baseball.svg);
+    background-image: url(../../images/sideMenu/baseball.svg);
 }
 
 #cis-ClassificationIconSmall-4{
-    background-image: url(../images/sideMenu/basketball.svg);
+    background-image: url(../../images/sideMenu/basketball.svg);
 }
 
 #cis-ClassificationIconSmall-5{
-    background-image: url(../images/sideMenu/tabletennis.svg);
+    background-image: url(../../images/sideMenu/tabletennis.svg);
 }
 
 #cis-ClassificationIconSmall-6{
-    background-image: url(../images/sideMenu/icehockey.svg);
+    background-image: url(../../images/sideMenu/icehockey.svg);
 }
 
 #cis-ClassificationIconSmall-7{
-    background-image: url(../images/sideMenu/snooker.svg);
+    background-image: url(../../images/sideMenu/snooker.svg);
 }
 
 #cis-ClassificationIconSmall-8{
-    background-image: url(../images/sideMenu/volleyball.svg);
+    background-image: url(../../images/sideMenu/volleyball.svg);
 }
 
 #cis-ClassificationIconSmall-9{
-    background-image: url(../images/sideMenu/athletics.svg);
+    background-image: url(../../images/sideMenu/athletics.svg);
 }
 
 #cis-ClassificationIconSmall-10{
-    background-image: url(../images/sideMenu/greyhoundracing.svg);
+    background-image: url(../../images/sideMenu/greyhoundracing.svg);
 }
 
 .wcl-PageContainer{
@@ -1134,43 +1147,43 @@ export default{
 }
 
 #cis-ClassificationIconSmall-1{
-    background-image: url(../images/sideMenu/soccer.svg);
+    background-image: url(../../images/sideMenu/soccer.svg);
 }
 
 #cis-ClassificationIconSmall-2{
-    background-image: url(../images/sideMenu/football.svg);
+    background-image: url(../../images/sideMenu/football.svg);
 }
 
 #cis-ClassificationIconSmall-3{
-    background-image: url(../images/sideMenu/baseball.svg);
+    background-image: url(../../images/sideMenu/baseball.svg);
 }
 
 #cis-ClassificationIconSmall-4{
-    background-image: url(../images/sideMenu/basketball.svg);
+    background-image: url(../../images/sideMenu/basketball.svg);
 }
 
 #cis-ClassificationIconSmall-5{
-    background-image: url(../images/sideMenu/tabletennis.svg);
+    background-image: url(../../images/sideMenu/tabletennis.svg);
 }
 
 #cis-ClassificationIconSmall-6{
-    background-image: url(../images/sideMenu/icehockey.svg);
+    background-image: url(../../images/sideMenu/icehockey.svg);
 }
 
 #cis-ClassificationIconSmall-7{
-    background-image: url(../images/sideMenu/snooker.svg);
+    background-image: url(../../images/sideMenu/snooker.svg);
 }
 
 #cis-ClassificationIconSmall-8{
-    background-image: url(../images/sideMenu/volleyball.svg);
+    background-image: url(../../images/sideMenu/volleyball.svg);
 }
 
 #cis-ClassificationIconSmall-9{
-    background-image: url(../images/sideMenu/athletics.svg);
+    background-image: url(../../images/sideMenu/athletics.svg);
 }
 
 #cis-ClassificationIconSmall-10{
-    background-image: url(../images/sideMenu/greyhoundracing.svg);
+    background-image: url(../../images/sideMenu/greyhoundracing.svg);
 }
 
 .wcl-PageContainer{

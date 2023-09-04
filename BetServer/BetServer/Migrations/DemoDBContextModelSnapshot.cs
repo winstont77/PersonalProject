@@ -30,11 +30,43 @@ namespace BetServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("BetMoney")
-                        .HasColumnType("float");
+                    b.Property<string>("AwayTeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EventId")
+                    b.Property<float>("AwayTeamOdds")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("BetStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BetTeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("BetTeamOdds")
+                        .HasColumnType("real");
+
+                    b.Property<string>("DateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
+
+                    b.Property<string>("HomeTeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("HomeTeamOdds")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sports")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -66,6 +98,9 @@ namespace BetServer.Migrations
                     b.Property<double>("AwayTeamOdds")
                         .HasColumnType("float");
 
+                    b.Property<double>("AwayTeamPoint")
+                        .HasColumnType("float");
+
                     b.Property<int>("AwayTeamScore")
                         .HasColumnType("int");
 
@@ -86,12 +121,18 @@ namespace BetServer.Migrations
                     b.Property<double>("HomeTeamOdds")
                         .HasColumnType("float");
 
+                    b.Property<double>("HomeTeamPoint")
+                        .HasColumnType("float");
+
                     b.Property<int>("HomeTeamScore")
                         .HasColumnType("int");
 
                     b.Property<string>("LoseTeamName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Point")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("PointStatus")
                         .HasColumnType("bit");
@@ -143,7 +184,9 @@ namespace BetServer.Migrations
                 {
                     b.HasOne("BetServer.Model.Event", null)
                         .WithMany("Bets")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BetServer.Model.User", null)
                         .WithMany("Bets")
