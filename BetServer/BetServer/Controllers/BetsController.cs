@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text;
+using System.Data;
 
 namespace BetServer.Controllers
 {
@@ -27,15 +28,15 @@ namespace BetServer.Controllers
         [Route("/PostBets")]
         public async Task<IActionResult> PostBets(DemoDBContext db, [FromBody] BetRequest betRequest) 
         {
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using (var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable))
             {
                 try
                 {
 
-                    var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Name == betRequest.UserName);
-                    // var user = db.Users.FromSqlRaw("SELECT * FROM Users WITH (UPDLOCK, ROWLOCK) WHERE Name = {0}", betRequest.UserName)
-                    //.Include(u => u.Bets)
-                    //.FirstOrDefault();
+                    //var user = db.Users.Include(u => u.Bets).FirstOrDefault(u => u.Name == betRequest.UserName);
+                    var user = db.Users.FromSqlRaw("SELECT * FROM Users WITH (UPDLOCK, ROWLOCK) WHERE Name = {0}", betRequest.UserName)
+                   .Include(u => u.Bets)
+                   .FirstOrDefault();
 
                     var tappay = new
                     {
