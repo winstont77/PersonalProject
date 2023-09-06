@@ -18,7 +18,7 @@ export default{
                 <div class="logo">
                     <a href="" class="simple-text">
                         <div class="logo-img">
-                            <img src="../images/backendManage/vuelogo.png" style="width: 21px;height: 21px;margin: auto;" alt="">
+                            <!-- <img src="../images/backendManage/vuelogo.png" style="width: 21px;height: 21px;margin: auto;" alt=""> -->
                         </div>
                         DashBoard
                     </a>
