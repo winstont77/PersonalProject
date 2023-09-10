@@ -14,5 +14,7 @@
         public string BetTeamName { get; set; }
         public float BetTeamOdds { get; set; }
         public bool BetStatus { get; set; } = false;
+        public int UserId { get; set; }
+        public bool CloseEvent { get; set; } = false;
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BetServer.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    [Migration("20230904102151_Initial Migration")]
+    [Migration("20230910130025_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -50,6 +50,9 @@ namespace BetServer.Migrations
                     b.Property<float>("BetTeamOdds")
                         .HasColumnType("real");
 
+                    b.Property<bool>("CloseEvent")
+                        .HasColumnType("bit");
+
                     b.Property<string>("DateTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -71,7 +74,7 @@ namespace BetServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -193,7 +196,9 @@ namespace BetServer.Migrations
 
                     b.HasOne("BetServer.Model.User", null)
                         .WithMany("Bets")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BetServer.Model.Event", b =>

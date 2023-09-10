@@ -125,6 +125,11 @@ namespace BetServer.Controllers
                 }
             }
 
+            foreach (var item in betsForEvent)
+            {
+                item.CloseEvent = true;
+            }
+
             db.SaveChanges();
 
             return Ok(betsForEvent.ToList());

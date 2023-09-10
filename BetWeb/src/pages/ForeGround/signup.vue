@@ -18,6 +18,7 @@ export default{
             })
             .then(res=>{
                 console.log(res)
+                router.push({path:"signout"})
             })
             .catch(err=>{
                 console.log(err)

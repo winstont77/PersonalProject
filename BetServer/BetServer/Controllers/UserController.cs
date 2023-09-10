@@ -103,6 +103,7 @@ namespace BetServer.Controllers
                 Name = signIn.Name,
                 Money = user.Money,
                 Profit = user.Profit,
+                UserId = user.Id
             });
         }
 
@@ -147,13 +148,28 @@ namespace BetServer.Controllers
 
         }
 
+        public class MemberId
+        {
+            public int UserId { get; set; }
+        }
         [Authorize]
         [HttpPost]
         [Route("/PostBetHistory")]
-        public async Task<IActionResult> PostBetHistory(DemoDBContext demoDBContext, MemberName memberName)
+        public async Task<IActionResult> PostBetHistory(DemoDBContext demoDBContext, MemberId memberId)
         {
+            // Ensure memberId is not null and has a valid UserId
+            if (memberId == null || memberId.UserId <= 0)
+            {
+                return BadRequest("Invalid memberId provided.");
+            }
 
-            return Ok();
+            // Query the Bet table for rows where UserId matches the provided memberId
+            var userBets = await demoDBContext.Bets
+                                              .Where(bet => bet.UserId == memberId.UserId)
+                                              .ToListAsync();
+
+            // Return the matching bets to the client
+            return Ok(userBets);
         }
     }
 }

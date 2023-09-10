@@ -78,6 +78,7 @@ export default{
                         "BetTeamOdds":selectodds.value,
                         "BetTeamName":selectteamname.value,
                         "Prime":"",
+                        "UserId":localStorage.getItem("userId")
                     },
                     "UserName":localStorage.getItem("username"),
                     "EventId":selectevent.value.id,

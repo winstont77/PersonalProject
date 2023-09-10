@@ -73,7 +73,8 @@ namespace BetServer.Migrations
                     BetTeamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BetTeamOdds = table.Column<float>(type: "real", nullable: false),
                     BetStatus = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CloseEvent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +89,8 @@ namespace BetServer.Migrations
                         name: "FK_Bets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

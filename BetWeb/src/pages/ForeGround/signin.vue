@@ -20,6 +20,7 @@ export default{
                 console.log(res)
                 localStorage.setItem("username", res.data.name)
                 localStorage.setItem("token", res.data.token)
+                localStorage.setItem("userId", res.data.userId)
                 router.push({path:"/index"})
             })
             .catch(err=>{

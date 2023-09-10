@@ -32,6 +32,19 @@ const routes = [
                 path:"basketball",
                 component:()=>import("../pages/ForeGround/sports/basketball.vue"),
             },
+            // 下注歷史
+            {
+                path:"allHistory",
+                component:()=>import("../pages/ForeGround/bets/allHistory.vue"),
+            },
+            {
+                path:"openHistory",
+                component:()=>import("../pages/ForeGround/bets/openHistory.vue"),
+            },
+            {
+                path:"closeHistory",
+                component:()=>import("../pages/ForeGround/bets/closeHistory.vue"),
+            },
         ]
     },
     /* 後台 */

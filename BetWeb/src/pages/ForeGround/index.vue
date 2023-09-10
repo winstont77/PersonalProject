@@ -74,8 +74,7 @@ export default{
             profit,
             changeDisplayUserDetailStatus,
             signout,
-            goto,
-            betHistory
+            goto
         }
     }
 }
@@ -150,8 +149,8 @@ export default{
                     <div class="hm-MainHeaderLogoWide">
                         <div class="hm-MainHeaderLogoWide_Bet365LogoImage"></div>
                     </div>
-                    <div class="hm-MainHeaderCentreWide" v-on:click="betHistory">
-                        <div class="hm-MainHeaderCentreWide_Link">
+                    <div class="hm-MainHeaderCentreWide">
+                        <div class="hm-MainHeaderCentreWide_Link" v-on:click="goto('allHistory')">
                             <div>投注歷史</div>
                         </div>
                         <div class="hm-MainHeaderCentreWide_Link" v-on:click="changeDisplayUserDetailStatus">
