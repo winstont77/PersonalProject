@@ -27,19 +27,26 @@ namespace BetServer.Controllers
         {
             try
             {
+                // Check if a user with the same name already exists in the database
+                var existingUser = db.Users.FirstOrDefault(u => u.Name == user.Name);
+                if (existingUser != null)
+                {
+                    return BadRequest($"User with name {user.Name} already exists.");
+                }
+
                 db.Add<User>(user);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Ok(user);
             }
-            catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
+            catch (DbUpdateException dbEx) // Capture EF's database exception
             {
                 return StatusCode(500, $"Database error: {dbEx.Message}");
             }
-            catch (HttpRequestException ex) // 這裡捕獲了由 HttpClient 丟出的異常
+            catch (HttpRequestException ex) // Here we capture the exception thrown by HttpClient
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            catch (Exception ex) // 這裡捕獲了其他不明確的異常
+            catch (Exception ex) // Here we capture other unspecified exceptions
             {
                 return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
@@ -138,6 +145,15 @@ namespace BetServer.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
 
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("/PostBetHistory")]
+        public async Task<IActionResult> PostBetHistory(DemoDBContext demoDBContext, MemberName memberName)
+        {
+
+            return Ok();
         }
     }
 }

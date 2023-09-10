@@ -2,7 +2,7 @@ const routes = [
     /* 前台 */
     {
         path:"/",
-        component:()=>import("../pages/ForeGround/index.vue"),
+        component:()=>import("../pages/ForeGround/signout.vue"),
     },
     {
         path:"/envTest",

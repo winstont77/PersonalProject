@@ -4,6 +4,90 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Connections;
+using RabbitMQ.Client;
+using BetServer.Service;
+
+//var builder = WebApplication.CreateBuilder(args);
+
+////CORS setting
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("MyAllowedOrigins",
+//        policy =>
+//        {
+//            policy.WithOrigins("*") // note the port is included 
+//                .AllowAnyHeader()
+//                .AllowAnyMethod();
+//        });
+//});
+
+//// Add services to the container.
+
+
+//builder.Services.AddDbContext<DemoDBContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DemoConnectionString")));
+
+//builder.Services.AddControllers();
+//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
+
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(o =>
+//{
+//    o.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey
+//        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ClockSkew = TimeSpan.Zero
+//    };
+//});
+
+//var app = builder.Build();
+
+////CORS setting
+//app.UseCors("MyAllowedOrigins");
+
+//// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
+//app.UseHttpsRedirection();
+
+//app.UseDefaultFiles();
+//app.Use(async (context, next) =>
+//{
+//    await next();
+
+//    if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+//    {
+//        context.Request.Path = "/index.html";
+//        await next();
+//    }
+//});
+//app.UseStaticFiles();
+
+//app.UseAuthorization();
+
+//app.MapControllers();
+
+//app.Run();
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,16 +104,20 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
+builder.Services.AddControllers().AddNewtonsoftJson();
 
-
+// Database context
 builder.Services.AddDbContext<DemoDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DemoConnectionString")));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// RabbitMQ setup
+var factory = new ConnectionFactory() { HostName = "localhost" };
+var connection = factory.CreateConnection();
+var channel = connection.CreateModel();
+builder.Services.AddSingleton(channel);
+builder.Services.AddHostedService<BetConsumerHostedService>();
 
+// JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,8 +129,7 @@ builder.Services.AddAuthentication(options =>
     {
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -50,6 +137,10 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -64,7 +155,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseDefaultFiles();
 app.Use(async (context, next) =>
 {
@@ -79,7 +169,5 @@ app.Use(async (context, next) =>
 app.UseStaticFiles();
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

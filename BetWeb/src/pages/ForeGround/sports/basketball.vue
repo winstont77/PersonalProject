@@ -11,6 +11,7 @@ export default{
         let selectevent = ref({})
         let betMoney = ref(100)
         let prime = ref("")
+        let betResultDisplay = ref(false)
         
         let getCurrentDateInFormat = () => {
             const now = new Date();
@@ -34,6 +35,7 @@ export default{
             displayBetResult.value = true
             selectevent.value = schedule.value[index]
             console.log(selectevent.value)
+            betResultDisplay.value = true
         };
 
         let handleBetResultEmit = (value) => {
@@ -222,10 +224,11 @@ export default{
             selectteamname, 
             selectevent, 
             betMoney,
+            betResultDisplay,
             updateBetMoney,
             selectTeam, 
             handleBetResultEmit,
-            sendCard
+            sendCard,
          };
     }
 }
@@ -287,7 +290,7 @@ export default{
                             </div>
                         </div>
                         <!-- <BetResult v-show="displayBetResult" v-bind:odds=selectodds v-bind:team=selectteamname v-bind:event="selectevent" @betResultEmit="handleBetResultEmit"></BetResult> -->
-                        <div class="betResult">
+                        <div class="betResult" v-show="betResultDisplay">
                             <div class="betResult-content">
                                 <div class="betResult-content-table">
                                     <table>

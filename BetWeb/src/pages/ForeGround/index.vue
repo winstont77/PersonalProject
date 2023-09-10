@@ -8,6 +8,21 @@ export default{
         let betMoney = ref(0)
         let profit = ref(0)
         let displayUserDetailStatus = ref(false)
+        let betHistory = ()=>{
+            axios.post(import.meta.env.VITE_API_URL + "/PostBetHistory"
+            ,{Name:localStorage.getItem("username")}
+            ,{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            .then(res=>{
+                console.log(res)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        }
         let changeDisplayUserDetailStatus = ()=>{
             displayUserDetailStatus.value=!displayUserDetailStatus.value
         }
@@ -59,7 +74,8 @@ export default{
             profit,
             changeDisplayUserDetailStatus,
             signout,
-            goto
+            goto,
+            betHistory
         }
     }
 }
@@ -134,7 +150,7 @@ export default{
                     <div class="hm-MainHeaderLogoWide">
                         <div class="hm-MainHeaderLogoWide_Bet365LogoImage"></div>
                     </div>
-                    <div class="hm-MainHeaderCentreWide">
+                    <div class="hm-MainHeaderCentreWide" v-on:click="betHistory">
                         <div class="hm-MainHeaderCentreWide_Link">
                             <div>投注歷史</div>
                         </div>

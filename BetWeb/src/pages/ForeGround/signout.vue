@@ -143,7 +143,7 @@ export default{
                                         <span>棒球</span>
                                         <div class="wn-PreMatchItem_FavIcon"></div>
                                     </div>
-                                    <div class="wn-PreMatchItem " v-on:click="goto('basketball')">
+                                    <div class="wn-PreMatchItem " v-on:click="signin">
                                         <div class="wn-ClassificationIcon ">
                                             <div class="cis-ClassificationIconSmall" id="cis-ClassificationIconSmall-4">
                                             </div>

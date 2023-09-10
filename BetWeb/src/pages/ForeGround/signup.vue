@@ -8,6 +8,8 @@ export default{
     setup(){
         let username = ref("")
         let password = ref(null)
+        let repeatSignupDisplay = ref(false)
+        let errorContent = ref("")
         let signup = ()=>{
             console.log(username.value, password.value)
             axios.post(import.meta.env.VITE_API_URL +　"/PostUsers", {
@@ -19,7 +21,17 @@ export default{
             })
             .catch(err=>{
                 console.log(err)
+                if(err.response.data==="User with name www already exists."){
+                    repeatSignupDisplay.value = true
+                    errorContent.value = "使用者名稱重複"
+                }else{
+                    repeatSignupDisplay.value = true
+                    errorContent.value = "使用者名稱或密碼錯誤"
+                }
             })
+        }
+        let gotoIndex = ()=>{
+            router.push({path:"signout"})
         }
         onMounted(()=>{
             
@@ -27,7 +39,10 @@ export default{
         return {
             username,
             password,
-            signup
+            repeatSignupDisplay,
+            errorContent,
+            signup,
+            gotoIndex
         }
     }
 }
@@ -70,7 +85,7 @@ export default{
                                         <div class="oam-FieldInputNewPassword">
                                             <div class="oam-FieldInputNewPassword_InputRow" id="oam-FieldInputNewPassword_InputRow" v-on:click="focusPassword">
                                                 <input type="password" class="oam-FieldInputNewPassword_Input" id="oam-FieldInputNewPassword_Input" placeholder="密碼" v-model="password">
-                                                <span class="oam-FieldInputNewPassword_MaskToggle" v-on:click="displayPassword">顯示</span>
+                                                <!-- <span class="oam-FieldInputNewPassword_MaskToggle" v-on:click="displayPassword">顯示</span> -->
                                                 <div class="oam-FieldInputNewPassword_InfoAnchor">
                                                     <div class="oam-FieldInputNewPassword_Tooltip" id="oam-FieldInputNewPassword_Tooltip">
                                                         <div class="oam-FieldInputNewPassword_TooltipText ">不可包含用戶名、姓名、電子郵箱或出生年份。</div>
@@ -89,7 +104,7 @@ export default{
                                     <div>
                                         <div class="oam-FieldInputCheckboxTerms ">
                                             <div class="oam-FieldInputCheckboxTerms_Container">
-                                                <label for="" class="oam-FieldInputCheckboxTerms_Checkbox" id="oam-FieldInputCheckboxTerms_Checkbox" v-on:click="checkTerms"></label>
+                                                <!-- <label for="" class="oam-FieldInputCheckboxTerms_Checkbox" id="oam-FieldInputCheckboxTerms_Checkbox" v-on:click="checkTerms"></label> -->
                                                 <div class="oam-FieldInputCheckboxTerms_Label">
                                                     <div>
                                                         <span>我已年滿18周歲，且已閱讀、接受並同意</span>
@@ -105,7 +120,7 @@ export default{
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="signuperrorprompt">使用者名稱重複</div>
+                                        <div class="signuperrorprompt" v-show="repeatSignupDisplay">{{ errorContent }}</div>
                                         <button class="oam-OAFieldSubmitButton " v-on:click="signup">加入</button>
                                     </div>
                                 </div>
@@ -143,7 +158,7 @@ export default{
     width: 100px;
     flex-shrink: 1;
     flex-grow: 0;
-    background-image: url(../images/logos/signupLogo.svg);
+    background-image: url(../../images/logos/signupLogo.svg);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50%;

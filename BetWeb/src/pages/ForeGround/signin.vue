@@ -6,6 +6,10 @@ export default{
     setup(){
         let username = ref("")
         let password = ref(null)
+        let inputError = ref(false)
+        let gotoIndex = ()=>{
+            router.push({path:"signout"})
+        }
         let signin = async ()=>{
             console.log(username.value, password.value)
             await axios.post(import.meta.env.VITE_API_URL + "/PostSignIn",{
@@ -20,6 +24,9 @@ export default{
             })
             .catch(err=>{
                 console.log(err)
+                if(err.response.status===401||err.response.status===400){
+                    inputError.value = true
+                }
             })
         }
         onMounted(()=>{
@@ -27,7 +34,9 @@ export default{
         return {
             username,
             password,
-            signin
+            inputError,
+            signin,
+            gotoIndex
         }
     }
 }
@@ -38,7 +47,7 @@ export default{
         <div class="signup">
             <div class="signup-element">
                 <div class="signup-element-header-background">
-                    <div class="signup-element-header-background-logo"></div>
+                    <div class="signup-element-header-background-logo" v-on:click="gotoIndex"></div>
                 </div>
                 <div class="signup-element-content">
                     <div class="signup-element-content-container">
@@ -63,7 +72,7 @@ export default{
                                         <div class="oam-FieldInputNewPassword">
                                             <div class="oam-FieldInputNewPassword_InputRow" id="oam-FieldInputNewPassword_InputRow">
                                                 <input type="password" class="oam-FieldInputNewPassword_Input" id="oam-FieldInputNewPassword_Input" placeholder="密碼" v-model="password">
-                                                <span class="oam-FieldInputNewPassword_MaskToggle">顯示</span>
+                                                <!-- <span class="oam-FieldInputNewPassword_MaskToggle">顯示</span> -->
                                                 <div class="oam-FieldInputNewPassword_InfoAnchor">
                                                 
                                                 </div>
@@ -76,7 +85,7 @@ export default{
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="signinerrorprompt" >使用者名稱或密碼輸入錯誤</div>
+                                        <div class="signinerrorprompt" v-show="inputError">使用者名稱或密碼輸入錯誤</div>
                                         <button class="oam-OAFieldSubmitButton" v-on:click="signin">加入</button>
                                     </div>
                                 </div>
@@ -114,7 +123,7 @@ export default{
     width: 100px;
     flex-shrink: 1;
     flex-grow: 0;
-    background-image: url(../images/logos/signupLogo.svg);
+    background-image: url(../../images/logos/signupLogo.svg);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50%;
