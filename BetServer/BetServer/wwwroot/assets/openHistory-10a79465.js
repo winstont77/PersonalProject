@@ -1,0 +1,1 @@
+import{o}from"./index-08797ec5.js";import{_ as t}from"./_plugin-vue_export-helper-c27b6911.js";const r={setup(){return o(()=>{}),{}}};function e(n,s,p,c,_,a){return" openHistory "}const u=t(r,[["render",e]]);export{u as default};
