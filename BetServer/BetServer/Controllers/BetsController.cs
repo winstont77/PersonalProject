@@ -200,5 +200,111 @@ namespace BetServer.Controllers
         {
             return Ok("success");
         }
+
+        //K6 press test
+        public class Test2
+        {
+            public string UserName { get; set; }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("/TestPostBets")]
+        public async Task<IActionResult> TestPostBets(DemoDBContext db, [FromBody] Test2 test)
+        {
+            using (var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable))
+            {
+                try
+                {
+                    var user = db.Users.FromSqlRaw("SELECT * FROM Users WITH (UPDLOCK, ROWLOCK) WHERE Name = {0}", "w")
+                   .Include(u => u.Bets)
+                   .FirstOrDefault();
+
+                    var betRequest = new BetRequest
+                    {
+                        Bet = new Bet
+                        {
+                            EventId = 1,
+                            DateTime = "",
+                            Money = 5000,
+                            AwayTeamName = "Phoenix Suns",
+                            HomeTeamName = "Golden State Warriors",
+                            AwayTeamOdds = (float)(double)db.Events.FirstOrDefaultAsync(
+                            e => e.AwayTeamName == "Phoenix Suns" &&
+                            e.HomeTeamName == "Golden State Warriors"
+                            ).Result.AwayTeamOdds,
+                            HomeTeamOdds = (float)(double)db.Events.FirstOrDefaultAsync(
+                            e => e.AwayTeamName == "Phoenix Suns" &&
+                            e.HomeTeamName == "Golden State Warriors"
+                            ).Result.HomeTeamOdds,
+                            Sports = "basketball",
+                            BetTeamName = "Phoenix Suns",
+                            BetTeamOdds = (float)(double)db.Events.FirstOrDefaultAsync(
+                            e => e.AwayTeamName == "Phoenix Suns" &&
+                            e.HomeTeamName == "Golden State Warriors"
+                            ).Result.AwayTeamOdds,
+                            BetStatus = false,
+                            UserId = 1,
+                            CloseEvent = false,
+                        },
+                        UserName = test.UserName,
+                        EventId = 2,
+                        Prime = "",
+                    };
+
+
+                    user.Money = user.Money + betRequest.Bet.Money;
+                    db.SaveChanges();
+
+                    user.Bets.Add(betRequest.Bet);
+                    db.SaveChanges();
+
+
+                    var selectEvent = await db.Events.FirstOrDefaultAsync(e => e.Id == betRequest.EventId);
+                    if (betRequest.Bet.BetTeamName == selectEvent.AwayTeamName)
+                    {
+                        selectEvent.AwayTeamMoney = selectEvent.AwayTeamMoney + betRequest.Bet.Money;
+                    }
+                    else
+                    {
+                        selectEvent.HomeTeamMoney = selectEvent.HomeTeamMoney + betRequest.Bet.Money;
+                    }
+                    db.SaveChanges();
+
+
+
+                    if (betRequest.Bet.BetTeamName == selectEvent.AwayTeamName)
+                    {
+                        selectEvent.AwayTeamOdds = selectEvent.AwayTeamOdds - (float)betRequest.Bet.Money / 500000;
+                        selectEvent.HomeTeamOdds = selectEvent.HomeTeamOdds + (float)betRequest.Bet.Money / 500000;
+                    }
+                    else
+                    {
+                        selectEvent.HomeTeamOdds = selectEvent.HomeTeamOdds - (float)betRequest.Bet.Money / 500000;
+                        selectEvent.AwayTeamOdds = selectEvent.AwayTeamOdds + (float)betRequest.Bet.Money / 500000;
+                    }
+                    db.SaveChanges();
+
+
+                    await transaction.CommitAsync();
+                    return Ok(selectEvent);
+                    //return Ok(betRequest);
+                }
+                catch (DbUpdateException dbEx) // 捕獲 EF 的資料庫異常
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, $"Database error: {dbEx.Message}");
+                }
+                catch (HttpRequestException ex) // 這裡捕獲了由 HttpClient 丟出的異常
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
+                catch (Exception ex) // 這裡捕獲了其他不明確的異常
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+                }
+            }
+        }
     }
 }
